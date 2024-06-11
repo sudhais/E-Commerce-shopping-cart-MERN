@@ -1,6 +1,7 @@
 import UserModel from '../models/userModel.js'
 import generateToken from '../utils/generateTokens.js'
 import asyncHandler from 'express-async-handler'
+import mongoose from 'mongoose'
 
 const RegisterUser = asyncHandler(async (req,res) => {
 
@@ -47,7 +48,60 @@ const authUser = asyncHandler(async (req,res) => {
   }
 })
 
+const updateUser = asyncHandler(async (req,res)=>{
+  const {id} = req.params
+  let user = req.user
+
+  if(user && !user.isAdmin && user._id.toString() !== id){  
+    res.status(401)
+    throw new Error('Only update your account')
+  }
+
+  if(user &&  user.isAdmin){
+    if(user._id.toString() !== id){
+      if(!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error('user not found')
+      }
+      const isUserExist = await UserModel.findById(id)
+      if(!isUserExist){
+        res.status(404)
+        throw new Error('user not found')
+      }
+      user = isUserExist
+    }
+
+  }
+  
+
+  const {email,password,profilePicture,name} = req.body
+  if(password)
+    user.password = req.body.password
+  if(email && user.email !== email){
+    const isUserExists = await UserModel.findOne({email})
+    if(isUserExists){
+      res.status(400)
+      throw new Error('already email exists')
+    }
+    user.email = email
+  }
+  user.profilePicture = profilePicture || user.profilePicture
+  user.name = name || user.name
+  const updatedUser = await user.save();
+
+  res.status(200).json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+    token: generateToken(user._id),
+    picture: updateUser.profilePicture
+  })
+  
+
+})
+
 export {
   RegisterUser,
-  authUser
+  authUser,
+  updateUser
 }
