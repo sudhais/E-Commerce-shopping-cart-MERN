@@ -1,14 +1,16 @@
 import express from "express"
 import { config } from "dotenv"
-import {join} from 'path'
+import path from 'path'
 import cors from "cors"
 import db from './config/dbconnect.js'
+import { notFound,errorHandler } from './middleware/errorMiddleware.js'
+import userRoutes from './routes/userRoutes.js'
 
 config();
 
 const app = express();
 app.use(cors());
-app.use(express.json);
+app.use(express.json());
 
 db();
 
@@ -18,14 +20,18 @@ app.use((req,res,next)=>{
   next();
 })
 
-app.use('/', (req,res) => {
-  res.status(200).json('hellow');
+app.post('/api', (req,res)=> {
+  res.send('hellow')
 })
 
+
+app.use('/api/v1/user',userRoutes);
+
 //error url middleware
-app.use('*', (req,res)=>{
-  res.status(404).json({message:'page not found'})
-})
+app.use(notFound);
+app.use(errorHandler);
+
+
 
 app.listen(process.env.PORT, () => {
   console.log(`server listening to the port : ${process.env.PORT}`);
