@@ -20,12 +20,12 @@ app.use((req,res,next)=>{
   next();
 })
 
-app.post('/api', (req,res)=> {
-  res.send('hellow')
-})
+// app.post("/api", (req,res)=> {
+//   res.send('hellow')
+// })
 
 
-app.use('/api/v1/user',userRoutes);
+app.use("/api/users",userRoutes);
 
 //error url middleware
 app.use(notFound);

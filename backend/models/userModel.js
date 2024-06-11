@@ -2,10 +2,9 @@ import mongoose from "mongoose"
 import bcrypt from 'bcryptjs'
 
 const userSchema = new mongoose.Schema({
-  username: {
+  name: {
     type: String,
     required: [true, 'user name cannot be null'],
-    unique: true,
     trim: true,
   },
   email: {
