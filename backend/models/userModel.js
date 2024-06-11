@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import bcrypt from 'bcryptjs'
 
-const userSchema = new mongoose.Schema({
+const userSchema =  mongoose.Schema({
   name: {
     type: String,
     required: [true, 'user name cannot be null'],
@@ -30,8 +30,8 @@ const userSchema = new mongoose.Schema({
 }, {timestamps:true})  // automatically create the created time and end time when using timestamps true
 
 // Method to compare entered password with hashed password
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+userSchema.methods.matchPassword = function (enteredPassword) {
+  return bcrypt.compareSync(enteredPassword, this.password);
 }
 
 // Pre-save middleware to hash the password before saving
