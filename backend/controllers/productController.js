@@ -1,5 +1,6 @@
 import ProductModel from '../models/productModel.js'
 import asyncHandler from 'express-async-handler'
+import mongoose from 'mongoose'
 
 
 //@access public
@@ -17,7 +18,25 @@ export const getProducts = asyncHandler(async (req,res) => {
 
 })
 
+//@access public
 export const getProductById = asyncHandler(async (req,res) => {
+
+  const {id} = req.params
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid product id')
+  }
+
+  const product = await ProductModel.findById(id)
+  if(product){
+    res.status(200).json({
+      product
+    })
+  }else{
+    res.status(400)
+    throw new Error('product not found')
+  }
+
 
 })
 
@@ -54,5 +73,26 @@ export const createProduct = asyncHandler(async (req,res) => {
     message: 'successfully created',
     product:iscreated
   })
+
+})
+
+export const deleteProductById = asyncHandler(async (req,res) => {
+
+  const {id} = req.params
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid product id')
+  }
+  const product = await ProductModel.findByIdAndDelete(id)
+
+  if(product){
+    res.status(200).json({
+      message:'successfully deleted',
+      product
+    })
+  }else {
+    res.status(404)
+    throw new Error('invalid product id')
+  }
 
 })
