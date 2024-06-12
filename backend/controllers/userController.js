@@ -75,6 +75,10 @@ const authUser = asyncHandler(async (req,res) => {
 const updateProfile = asyncHandler(async (req,res)=>{
   const {name, email, password} = req.body
   const user = await UserModel.findById(req.user._id)
+  if(!user){
+    res.status(404)
+    throw new Error('user not found')
+  }
   if(name && name !== user.name)
     user.name = name
   if(email && email !== user.email){
@@ -117,15 +121,13 @@ const deleteProfile = asyncHandler(async (req,res) => {
 const getUserById = asyncHandler(async (req,res) => {
   const {id} = req.params
 
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid user id')
+  }
+
   const user = await UserModel.findById(id)
   if(user){
-    res.status(200).json({
-      _id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      isAdmin: req.user.isAdmin,
-      prfile: req.user.profilePicture,
-    })
+    await getUserProfile(req,res)
   }else{
     res.status(404)
     throw new Error('user not found')
@@ -134,53 +136,13 @@ const getUserById = asyncHandler(async (req,res) => {
 
 const updateUser = asyncHandler(async (req,res)=>{
   const {id} = req.params
-  let user = req.user
 
-  if(user && !user.isAdmin && user._id.toString() !== id){  
-    res.status(401)
-    throw new Error('Only update your account')
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid user id')
   }
 
-  if(user &&  user.isAdmin){
-    if(user._id.toString() !== id){
-      if(!mongoose.Types.ObjectId.isValid(id)) {
-        throw new Error('user not found')
-      }
-      const isUserExist = await UserModel.findById(id)
-      if(!isUserExist){
-        res.status(404)
-        throw new Error('user not found')
-      }
-      user = isUserExist
-    }
-
-  }
-  
-
-  const {email,password,profilePicture,name} = req.body
-  if(password)
-    user.password = req.body.password
-  if(email && user.email !== email){
-    const isUserExists = await UserModel.findOne({email})
-    if(isUserExists){
-      res.status(400)
-      throw new Error('already email exists')
-    }
-    user.email = email
-  }
-  user.profilePicture = profilePicture || user.profilePicture
-  user.name = name || user.name
-  const updatedUser = await user.save();
-
-  res.status(200).json({
-    _id: updatedUser._id,
-    name: updatedUser.name,
-    email: updatedUser.email,
-    isAdmin: updatedUser.isAdmin,
-    token: generateToken(user._id),
-    picture: updateUser.profilePicture
-  })
-  
+  req.user = {_id:id}
+  await updateProfile(req,res)
 
 })
 
