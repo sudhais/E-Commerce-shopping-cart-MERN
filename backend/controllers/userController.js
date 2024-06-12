@@ -114,6 +114,24 @@ const deleteProfile = asyncHandler(async (req,res) => {
   }
 })
 
+const getUserById = asyncHandler(async (req,res) => {
+  const {id} = req.params
+
+  const user = await UserModel.findById(id)
+  if(user){
+    res.status(200).json({
+      _id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      isAdmin: req.user.isAdmin,
+      prfile: req.user.profilePicture,
+    })
+  }else{
+    res.status(404)
+    throw new Error('user not found')
+  }
+})
+
 const updateUser = asyncHandler(async (req,res)=>{
   const {id} = req.params
   let user = req.user
@@ -166,6 +184,18 @@ const updateUser = asyncHandler(async (req,res)=>{
 
 })
 
+const deleteUser = asyncHandler(async (req,res) => {
+  const {id} = req.params
+  const user = await UserModel.findByIdAndDelete(id)
+
+  if(user){
+    res.status(200).json({message:'successfully removed'})
+  }else{
+    res.status(404)
+    throw new Error('user not found')
+  }
+})
+
 export {
   RegisterUser,
   authUser,
@@ -173,5 +203,7 @@ export {
   getUsers,
   getUserProfile,
   updateProfile,
-  deleteProfile
+  deleteProfile,
+  getUserById,
+  deleteUser
 }
