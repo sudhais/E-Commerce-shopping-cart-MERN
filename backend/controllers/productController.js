@@ -92,7 +92,63 @@ export const deleteProductById = asyncHandler(async (req,res) => {
     })
   }else {
     res.status(404)
+    throw new Error('product not found')
+  }
+
+})
+
+export const updateProductById = asyncHandler(async (req,res) => {
+
+  const {id} = req.params
+  const { name, price, description, image, brand, category, countInStock } = req.body;
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error('invalid product id')
   }
 
+  const product = await ProductModel.findById(id);
+
+  if(!product) {
+    res.status(404)
+    throw new Error('product not found')
+  }
+
+  if(name && name !== product.name){
+    const isExists = await ProductModel.findOne({name})
+    if(isExists){
+      res.status(400)
+      throw new Error('already product name exists')
+    }
+    product.name = name
+  }
+
+  if(price && price !== product.price)
+    product.price = price
+
+  if(description && description !== product.description)
+    product.description = description
+
+  if(image && image !== product.image)
+    product.image = image
+
+  if(brand && brand !== product.brand)
+    product.brand = brand
+
+  if(category && category !== product.category)
+    product.category = category
+
+  if(countInStock && countInStock !== product.countInStock)
+    product.countInStock = countInStock
+
+
+  const updatedProduct = await ProductModel.findByIdAndUpdate(id,product, {new:true})
+
+  if(updatedProduct)
+    res.status(200).json({
+      message: 'succesfully updated',
+      product: updatedProduct
+    })
+
+  res.status(400)
+  throw new Error('failed to update')
 })
