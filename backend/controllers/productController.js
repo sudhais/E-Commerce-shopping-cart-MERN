@@ -40,6 +40,53 @@ export const getProductById = asyncHandler(async (req,res) => {
 
 })
 
+//@access private
+export const createPoductReview = asyncHandler(async (req,res) => {
+
+  const {rating, comment} = req.body
+  const {id} = req.params
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid product id')
+  }
+
+  const product = await ProductModel.findById(id)
+
+  if(!product){
+    res.status(404)
+    throw new Error('product not found')
+  }
+
+  const isAlreadyReviewed = product.reviews.length !== 0 ? (product.reviews.some(
+    (r) => r.user.toString() === req.user._id.toString()
+  )) : false
+  if (isAlreadyReviewed) {
+    res.status(400);
+    throw new Error("Product already reviewed");
+  }
+
+  const review = {
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+    user: req.user._id
+  }
+
+  product.reviews.push(review)
+  product.numReviews = product.reviews.length
+  product.rating = product.reviews.reduce((acc,item) => item.rating + acc, 0) / product.reviews.length
+
+  const updatePro = await product.save()
+  if(!updatePro){
+    res.status(400)
+    throw new Error('Failed to add reviewed')
+  }else {
+    res.status(200).json({
+      message: 'successfully added reviews'
+    })
+  }
+
+})
 
 //@access admin only
 export const createProduct = asyncHandler(async (req,res) => {
@@ -76,6 +123,7 @@ export const createProduct = asyncHandler(async (req,res) => {
 
 })
 
+//@aaccess admin only
 export const deleteProductById = asyncHandler(async (req,res) => {
 
   const {id} = req.params
@@ -97,6 +145,7 @@ export const deleteProductById = asyncHandler(async (req,res) => {
 
 })
 
+//@aaccess admin only
 export const updateProductById = asyncHandler(async (req,res) => {
 
   const {id} = req.params
@@ -148,7 +197,9 @@ export const updateProductById = asyncHandler(async (req,res) => {
       message: 'succesfully updated',
       product: updatedProduct
     })
-
-  res.status(400)
-  throw new Error('failed to update')
+  else{
+    res.status(400)
+    throw new Error('failed to update')
+  }
+  
 })
