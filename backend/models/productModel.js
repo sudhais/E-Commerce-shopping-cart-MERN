@@ -30,7 +30,8 @@ const productSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: [true, 'name should not be null']
+    required: [true, 'name should not be null'],
+    unique: true
   },
   image: {
     type: String,
@@ -44,7 +45,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'category should not be null']
   },
-  discription: {
+  description: {
     type: String,
     required: [true, 'description should not be null']
   },
