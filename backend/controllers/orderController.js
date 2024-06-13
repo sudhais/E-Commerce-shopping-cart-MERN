@@ -46,5 +46,11 @@ export const addOrderItem = AsyncHandler( async (req,res) => {
 
   const createdOrder = await order.save()
 
-  res.status(201).json(createdOrder)
+  if(createdOrder)
+    res.status(201).json(createdOrder)
+  else{
+    res.status(500)
+    throw new Error('failed to update the data')
+  }
+  
 })
