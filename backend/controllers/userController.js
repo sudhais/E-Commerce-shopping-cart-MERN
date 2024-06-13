@@ -3,6 +3,8 @@ import generateToken from '../utils/generateTokens.js'
 import asyncHandler from 'express-async-handler'
 import mongoose from 'mongoose'
 
+//get all users
+//@access only admin
 const getUsers = asyncHandler(async (req,res) => {
 
   const users = await UserModel.find({})
@@ -17,6 +19,7 @@ const getUsers = asyncHandler(async (req,res) => {
 
 })
 
+//@access private
 const getUserProfile = asyncHandler(async (req,res)=> {
   res.status(200).json({
     _id: req.user._id,
@@ -27,6 +30,7 @@ const getUserProfile = asyncHandler(async (req,res)=> {
   })
 })
 
+//@access public
 const RegisterUser = asyncHandler(async (req,res) => {
 
   const {name,email,password} = req.body
@@ -55,6 +59,8 @@ const RegisterUser = asyncHandler(async (req,res) => {
   } 
 })
 
+//@access public
+//login
 const authUser = asyncHandler(async (req,res) => {
   const {email,password} = req.body
   const user = await UserModel.findOne({email})
@@ -72,6 +78,7 @@ const authUser = asyncHandler(async (req,res) => {
   }
 })
 
+//@access private
 const updateProfile = asyncHandler(async (req,res)=>{
   const {name, email, password} = req.body
   const user = await UserModel.findById(req.user._id)
@@ -106,6 +113,7 @@ const updateProfile = asyncHandler(async (req,res)=>{
 
 })
 
+//@access private
 const deleteProfile = asyncHandler(async (req,res) => {
 
   const user = await UserModel.findByIdAndDelete(req.user._id)
@@ -118,6 +126,7 @@ const deleteProfile = asyncHandler(async (req,res) => {
   }
 })
 
+//@access only admin
 const getUserById = asyncHandler(async (req,res) => {
   const {id} = req.params
 
@@ -134,6 +143,7 @@ const getUserById = asyncHandler(async (req,res) => {
   }
 })
 
+//@access only admin
 const updateUser = asyncHandler(async (req,res)=>{
   const {id} = req.params
 
@@ -146,8 +156,14 @@ const updateUser = asyncHandler(async (req,res)=>{
 
 })
 
+//@access only admin
 const deleteUser = asyncHandler(async (req,res) => {
   const {id} = req.params
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid user id')
+  }
+
   const user = await UserModel.findByIdAndDelete(id)
 
   if(user){

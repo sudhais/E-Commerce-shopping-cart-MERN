@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/index.js",
-    "dev": "nodemon backend/index.js"
+    "dev": "nodemon backend/index.js",
+    "data:import": "node backend/seeders",
+    "data:destroy": "node backend/seeders -d"
   },
   "author": "Sudhais F.M",
   "license": "ISC",

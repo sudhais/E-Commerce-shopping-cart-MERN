@@ -5,6 +5,7 @@ import cors from "cors"
 import db from './config/dbconnect.js'
 import { notFound,errorHandler } from './middleware/errorMiddleware.js'
 import userRoutes from './routes/userRoutes.js'
+import productRoutes from './routes/productRoutes.js'
 
 config();
 
@@ -26,6 +27,7 @@ app.use((req,res,next)=>{
 
 
 app.use("/api/users",userRoutes);
+app.use("/api/products",productRoutes)
 
 //error url middleware
 app.use(notFound);
