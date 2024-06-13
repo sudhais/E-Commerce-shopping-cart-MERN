@@ -84,8 +84,55 @@ export const getOrderById = AsyncHandler(async (req,res) => {
     throw new Error('order not found')
   }
 
+})
 
+//@access private
+export const updateOrderToPaid = AsyncHandler(async (req,res) => {
 
+  const {id} = req.params 
+  validMongoId(id)
+
+  const order = await OrderModel.findById(id)
+  if(!order) {
+    res.status(404)
+    throw new Error('order not found')
+  }
+
+  order.isPaid = true,
+  order.paidAt = Date.now()
+  order.paymentResult = {
+    id: req.body.id,
+    status: req.body.status,
+    update_time: req.body.update_time,
+    email_address: req.body.payer.email_address
+  }
+
+  const updateOrder = await order.save()
+  if(!updateOrder){
+    res.status(400)
+    throw new Error('failed to update')
+  }
+
+  res.status(200).json(updateOrder)
+})
+
+export const updateOrderToDelivered = AsyncHandler(async (req,res) => {
+
+  const {id} = req.params 
+  validMongoId(id)
+
+  const order = await OrderModel.findById(id)
+  if(!order) {
+    res.status(404)
+    throw new Error('order not found')
+  }
+
+  order.isDelivered = true
+  order.deliveredAt = Date.now()
+
+  const updatedOrder = await order.save()
+
+  res.status(200).json(updatedOrder)
 
 })
 
