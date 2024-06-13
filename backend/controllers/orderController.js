@@ -1,5 +1,6 @@
 import AsyncHandler from "express-async-handler"
 import OrderModel from '../models/orderModel.js'
+import mongoose from "mongoose"
 
 //@access admin only
 export const getOrderItems = AsyncHandler(async (req,res) => {
@@ -54,3 +55,42 @@ export const addOrderItem = AsyncHandler( async (req,res) => {
   }
   
 })
+
+//@access private
+export const getMyOrders = AsyncHandler(async (req,res) => {
+
+  const orders = await OrderModel.find({user:req.user._id})
+  if(orders){
+    res.status(200).json(orders)
+  }else{
+    res.status(400)
+    throw new Error('orders not found')
+  }
+})
+
+//@access admin only
+export const getOrderById = AsyncHandler(async (req,res) => {
+
+  const {id} = req.params 
+
+  validMongoId(id)
+
+  const order = await OrderModel.findById(id)
+
+  if(order){
+    res.status(200).json(order)
+  }else{
+    res.status(404)
+    throw new Error('order not found')
+  }
+
+
+
+
+})
+
+const validMongoId = (id) => {
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('invalid order id')
+  }
+}
