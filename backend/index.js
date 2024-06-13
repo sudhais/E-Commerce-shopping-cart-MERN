@@ -6,6 +6,7 @@ import db from './config/dbconnect.js'
 import { notFound,errorHandler } from './middleware/errorMiddleware.js'
 import userRoutes from './routes/userRoutes.js'
 import productRoutes from './routes/productRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 config();
 
@@ -28,6 +29,7 @@ app.use((req,res,next)=>{
 
 app.use("/api/users",userRoutes);
 app.use("/api/products",productRoutes)
+app.use("/api/orders", orderRoutes )
 
 //error url middleware
 app.use(notFound);
