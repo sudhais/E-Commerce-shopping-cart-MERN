@@ -60,7 +60,6 @@ export const getProductById = asyncHandler(async (req,res) => {
 export const getTopProducts = asyncHandler(async (req,res) => {
 
   const product = await ProductModel.find({}).sort({rating:-1}).limit(3)
-  console.log(product);
   if(product){
     res.status(200).json({
       product
