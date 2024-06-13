@@ -6,21 +6,30 @@ import {
   getProductById,
   deleteProductById,
   updateProductById,
-  createPoductReview
+  createPoductReview,
+  getTopProducts
 }from '../controllers/productController.js'
 
 const router = Router()
 
+
 router.route('/')
   .get(getProducts)
   .post(protect,admin,createProduct)
+
+router.route('/:id/reviews')
+  .post(protect,createPoductReview)
+
+router.route('/top')
+  .get(getTopProducts)
 
 router.route('/:id')
   .get(getProductById)
   .delete(protect,admin,deleteProductById)
   .put(protect,admin,updateProductById)
 
-router.route('/:id/reviews')
-  .post(protect,createPoductReview)
+
+
+
 
 export default router

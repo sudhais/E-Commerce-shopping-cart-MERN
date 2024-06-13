@@ -12,8 +12,8 @@ export const getProducts = asyncHandler(async (req,res) => {
       products
     })
   }else{
-    res.status(404)
-    throw new Error('no products not found')
+    res.status(500)
+    throw new Error('something went wrong please try again later')
   }
 
 })
@@ -37,6 +37,22 @@ export const getProductById = asyncHandler(async (req,res) => {
     throw new Error('product not found')
   }
 
+
+})
+
+//@access public
+export const getTopProducts = asyncHandler(async (req,res) => {
+
+  const product = await ProductModel.find({}).sort({rating:-1}).limit(3)
+  console.log(product);
+  if(product){
+    res.status(200).json({
+      product
+    })
+  }else{
+    res.status(500)
+    throw new Error('something went wrong please try again later')
+  }
 
 })
 
@@ -72,10 +88,12 @@ export const createPoductReview = asyncHandler(async (req,res) => {
     user: req.user._id
   }
 
-  product.reviews.push(review)
-  product.numReviews = product.reviews.length
-  product.rating = product.reviews.reduce((acc,item) => item.rating + acc, 0) / product.reviews.length
+  product.reviews.push(review)      //adding reviews to product review array
+  product.numReviews = product.reviews.length     //calculating total number of reviews
 
+  //calculating average rating
+  product.rating = product.reviews.reduce((acc,item) => item.rating + acc, 0) / product.reviews.length  
+  
   const updatePro = await product.save()
   if(!updatePro){
     res.status(400)
@@ -92,9 +110,8 @@ export const createPoductReview = asyncHandler(async (req,res) => {
 export const createProduct = asyncHandler(async (req,res) => {
 
   const product = req.body
-
-  const isExists = await ProductModel({name:product.name})
-
+  
+  const isExists = await ProductModel.findOne({name:product.name})
   if(isExists){
     res.status(400)
     throw new Error('product already exists')
