@@ -1,7 +1,7 @@
 {
   "name": "e-commerce-mern",
   "version": "1.0.0",
-  "description": "",
+  "description": "E-Commerce shopping cart full functions",
   "main": "index.js",
   "type": "module",
   "scripts": {
