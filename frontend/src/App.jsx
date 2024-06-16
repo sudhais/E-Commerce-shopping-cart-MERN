@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Home from './pages/HomePage'
 import Footer from './components/Footer'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 
 
 
@@ -16,6 +17,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="/login" Component={LoginPage}/>
+            <Route path="/register" Component={RegisterPage}/>
             <Route path="/" Component={Home}/>
           </Routes>
         </Container>
