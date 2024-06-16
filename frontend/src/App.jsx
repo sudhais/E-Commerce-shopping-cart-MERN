@@ -2,6 +2,7 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import {Container} from 'react-bootstrap'
 import Header from './components/Header'
 import Home from './pages/HomePage'
+import Footer from './components/Footer'
 
 
 
@@ -18,6 +19,7 @@ function App() {
           </Routes>
         </Container>
       </main>
+      <Footer/>
     </BrowserRouter>
   )
 }
