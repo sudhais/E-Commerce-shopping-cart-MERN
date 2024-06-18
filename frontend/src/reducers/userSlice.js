@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
-import {signIn} from '../actions/userThunk'
+import {signIn, signUp} from '../actions/userThunk'
 
 const initialState = {
   userInfo: null,
@@ -28,6 +28,18 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(signIn.rejected, (state,action) => {
+        state.loading = false;
+        state.error = action.payload
+      })
+      .addCase(signUp.pending, (state)=> {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(signUp.fulfilled, (state,action)=> {
+        state.userInfo = action.payload;
+        state.loading = false;
+      })
+      .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload
       })
