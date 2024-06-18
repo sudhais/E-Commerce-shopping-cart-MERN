@@ -1,5 +1,5 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
-import axios from "axios"
+import {createSlice} from "@reduxjs/toolkit"
+import {signIn} from '../actions/userThunk'
 
 const initialState = {
   userInfo: null,
@@ -7,43 +7,10 @@ const initialState = {
   error: false
 }
 
-export const signIn= createAsyncThunk('api/user/login', async ({email,password}, {rejectWithValue}) => {
-  try {
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-    const res = await axios.post(
-      'api/users/login',
-      {email,password},
-      config)
-      const data = res.data
-      return data
-    
-  } catch (error) {
-    const message = error.response.data.message
-    return rejectWithValue(message)
-    
-  }
-})
-
 const userSlice = createSlice({
   name:'user',
   initialState,
   reducers:{
-    signInRequest:(state) => {
-      state.loading = true;
-    },
-    signInSuccess: (state,action) => {
-      state.userInfo = action.payload;
-      state.loading = false;
-    },
-    signInFailure: (state,action) => {
-      state.loading = false;
-      state.error = action.payload
-    },
     logoutSuccess: (state) => {
       state.userInfo = null;
       state.loading = null;
@@ -69,9 +36,6 @@ const userSlice = createSlice({
 })
 
 export const {
-  signInRequest,
-  signInFailure,
-  signInSuccess,
   logoutSuccess
 } = userSlice.actions;
 
