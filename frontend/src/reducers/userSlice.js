@@ -1,8 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit"
-import {signIn, signUp} from '../actions/userThunk'
+import {
+  signIn, 
+  signUp,
+  listUser} from '../actions/userThunk'
 
 const initialState = {
   userInfo: null,
+  userList: [],
   loading: false,
   error: false
 }
@@ -13,6 +17,7 @@ const userSlice = createSlice({
   reducers:{
     logoutSuccess: (state) => {
       state.userInfo = null;
+      state.userList = []
       state.loading = null;
       state.error = null;
     },
@@ -43,6 +48,18 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(signUp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+      })
+      .addCase(listUser.pending, (state)=> {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(listUser.fulfilled, (state,action)=> {
+        state.userList = action.payload;
+        state.loading = false;
+      })
+      .addCase(listUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload
       })

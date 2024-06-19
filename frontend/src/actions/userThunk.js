@@ -46,3 +46,25 @@ export const signUp = createAsyncThunk('/users', async (user,{rejectWithValue}) 
     return rejectWithValue(message)
   }
 })
+
+export const listUser = createAsyncThunk('userlist', async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const token = state.user.userInfo.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    const res = await axios.get('/api/users',config);
+    const {users} = res.data;
+    return users;
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+});

@@ -5,6 +5,8 @@ import Home from './pages/HomePage'
 import Footer from './components/Footer'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import UserListPage from './pages/UserListPage'
+import ProductListPage from './pages/ProductListPage'
 
 
 
@@ -16,8 +18,8 @@ function App() {
       <main className='py-3'>
         <Container>
           <Routes>
-            <Route path="/admin/userlist" Component={LoginPage}/>
-            <Route path="/admin/productlist" Component={LoginPage}/>
+            <Route path="/admin/userlist" Component={UserListPage}/>
+            <Route path="/admin/productlist" Component={ProductListPage}/>
             <Route path="/login" Component={LoginPage}/>
             <Route path="/register" Component={RegisterPage}/>
             <Route path="/" Component={Home}/>
