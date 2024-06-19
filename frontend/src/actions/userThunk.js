@@ -1,9 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit"
 import axios from "axios"
-
-export const signIn= createAsyncThunk('user/login', async ({email,password}, {rejectWithValue}) => {
+import {testing} from '../reducers/userSlice'
+export const signIn= createAsyncThunk('user/login', async ({email,password}, {rejectWithValue,dispatch}) => {
   try {
 
+    dispatch(testing())
     const config = {
       headers: {
         'Content-Type': 'application/json',

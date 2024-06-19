@@ -15,6 +15,9 @@ const userSlice = createSlice({
       state.userInfo = null;
       state.loading = null;
       state.error = null;
+    },
+    testing: (state) => {
+      console.log('working');
     }
   },
   extraReducers: (build) => {
@@ -48,7 +51,8 @@ const userSlice = createSlice({
 })
 
 export const {
-  logoutSuccess
+  logoutSuccess,
+  testing
 } = userSlice.actions;
 
 export default userSlice.reducer;
