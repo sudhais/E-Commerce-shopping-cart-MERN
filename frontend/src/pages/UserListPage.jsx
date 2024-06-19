@@ -15,12 +15,13 @@ export default function UserListPage() {
 
   useEffect(() => {
     if(userInfo && userInfo.isAdmin){
-      dispatch(listUser())
+      if(!userList.length)
+        dispatch(listUser())
     }else{
       navigate('/login')
     }
 
-  }, [userInfo,dispatch])
+  }, [dispatch, navigate, userInfo, userList.length])
 
   const handleDelete = (id) => {
 

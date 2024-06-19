@@ -3,7 +3,8 @@ import {
   signIn, 
   signUp,
   listUser,
-  userDelete
+  userDelete,
+  getUserDetails
 } from '../actions/userThunk'
 
 const userInfo = {
@@ -18,9 +19,27 @@ const userList = {
   list: []
 }
 
+const userDetails = {
+  error:false,
+  loading:false,
+  details: {
+    name:'',
+    email:'',
+    isAdmin:''
+  }
+}
+
+const userUpdate = {
+  error:false,
+  loading:false,
+  successUpdate:false
+}
+
 const initialState = {
   userInfo,
-  userList
+  userList,
+  userDetails,
+  userUpdate
 }
 
 const userSlice = createSlice({
@@ -29,7 +48,15 @@ const userSlice = createSlice({
   reducers:{
     userReset: (state) => {
       state.userInfo = userInfo;
-      state.userList = userList
+      state.userList = userList;
+      state.userDetails = userDetails;
+      state.userUpdate = userUpdate;
+    },
+    userDetailsReset: (state) => {
+      state.userDetails = userDetails;
+    },
+    userUpdateReset: (state) => {
+      state.userUpdate = userUpdate;
     },
     testing: (state) => {
       console.log('working');
@@ -85,12 +112,25 @@ const userSlice = createSlice({
         state.userList.loading = false;
         state.userList.error = action.payload
       })
+      .addCase(getUserDetails.pending, (state)=> {
+        state.userDetails.loading = true;
+        state.userDetails.error = false;
+      })
+      .addCase(getUserDetails.fulfilled, (state,action)=> {
+        state.userDetails.details = action.payload;
+        state.userDetails.loading = false;
+      })
+      .addCase(getUserDetails.rejected, (state, action) => {
+        state.userDetails.loading = false;
+        state.userDetails.error = action.payload
+      })
   } 
   
 })
 
 export const {
   userReset,
+  userUpdateReset,
   testing
 } = userSlice.actions;
 

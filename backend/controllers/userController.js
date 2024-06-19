@@ -136,6 +136,7 @@ const getUserById = asyncHandler(async (req,res) => {
 
   const user = await UserModel.findById(id)
   if(user){
+    req.user = user
     await getUserProfile(req,res)
   }else{
     res.status(404)

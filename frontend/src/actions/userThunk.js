@@ -98,3 +98,30 @@ export const userDelete = createAsyncThunk('userDelete', async(id, {rejectWithVa
     
   }
 })
+
+export const getUserDetails = createAsyncThunk('userDetails', async(id,{rejectWithValue,getState}) => {
+
+  try {
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    const res = await axios.get(`/api/users/${id}`,config)
+    const data = res.data
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+
+
+
+})
