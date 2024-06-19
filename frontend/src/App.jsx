@@ -16,6 +16,8 @@ function App() {
       <main className='py-3'>
         <Container>
           <Routes>
+            <Route path="/admin/userlist" Component={LoginPage}/>
+            <Route path="/admin/productlist" Component={LoginPage}/>
             <Route path="/login" Component={LoginPage}/>
             <Route path="/register" Component={RegisterPage}/>
             <Route path="/" Component={Home}/>
