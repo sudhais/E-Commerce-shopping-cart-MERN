@@ -1,4 +1,4 @@
-import {createAsyncThunk} from "@reduxjs/toolkit"
+import {asyncThunkCreator, createAsyncThunk} from "@reduxjs/toolkit"
 import axios from "axios"
 import {testing} from '../reducers/userSlice'
 export const signIn= createAsyncThunk('user/login', async ({email,password}, {rejectWithValue,dispatch}) => {
@@ -68,3 +68,33 @@ export const listUser = createAsyncThunk('userlist', async (_, { rejectWithValue
     return rejectWithValue(message);
   }
 });
+
+export const userDelete = createAsyncThunk('userDelete', async(id, {rejectWithValue, getState}) => {
+  try {
+
+    const state = getState();
+    const token = state.user.userInfo.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    const res = await axios.delete(`/api/users/${id}`,config)
+    const {success} = res.data
+    let users = state.user.userList
+    if(success){
+      users =  users.filter((user)=> user._id !== id)
+    }
+    return users
+
+  } catch (error) {
+
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+    
+  }
+})

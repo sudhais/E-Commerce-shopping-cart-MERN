@@ -167,7 +167,7 @@ const deleteUser = asyncHandler(async (req,res) => {
   const user = await UserModel.findByIdAndDelete(id)
 
   if(user){
-    res.status(200).json({message:'successfully removed'})
+    res.status(200).json({success:true,message:'successfully removed'})
   }else{
     res.status(404)
     throw new Error('user not found')

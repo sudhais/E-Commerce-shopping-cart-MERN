@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import {Button, Table } from 'react-bootstrap'
-import {listUser} from '../actions/userThunk'
+import {listUser, userDelete} from '../actions/userThunk'
 
 
 export default function UserListPage() {
@@ -19,7 +19,15 @@ export default function UserListPage() {
       navigate('/login')
     }
 
-  }, [listUser,dispatch])
+  }, [userInfo,dispatch])
+
+  const handleDelete = (id) => {
+
+    if(window.confirm('Are you sure')){
+      dispatch(userDelete(id))
+    }
+
+  }
 
 
   return (
@@ -62,8 +70,9 @@ export default function UserListPage() {
                   <Button 
                     variant='danger' 
                     className='btn-sm'
+                    onClick={() => handleDelete(user._id)}
                   >
-                    <i className='fas fa-edit'/>
+                    <i className='fas fa-trash'/>
                   </Button>
                 </td>
               </tr>

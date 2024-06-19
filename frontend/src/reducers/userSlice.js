@@ -2,7 +2,9 @@ import {createSlice} from "@reduxjs/toolkit"
 import {
   signIn, 
   signUp,
-  listUser} from '../actions/userThunk'
+  listUser,
+  userDelete
+} from '../actions/userThunk'
 
 const initialState = {
   userInfo: null,
@@ -60,6 +62,18 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(listUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload
+      })
+      .addCase(userDelete.pending, (state)=> {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(userDelete.fulfilled, (state,action)=> {
+        state.userList = action.payload;
+        state.loading = false;
+      })
+      .addCase(userDelete.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload
       })
