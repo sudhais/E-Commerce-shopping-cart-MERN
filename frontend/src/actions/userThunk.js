@@ -50,7 +50,7 @@ export const signUp = createAsyncThunk('/users', async (user,{rejectWithValue}) 
 export const listUser = createAsyncThunk('userlist', async (_, { rejectWithValue, getState }) => {
   try {
     const state = getState();
-    const token = state.user.userInfo.token;
+    const token = state.user.userInfo.user.token;
 
     const config = {
       headers: {
@@ -73,7 +73,7 @@ export const userDelete = createAsyncThunk('userDelete', async(id, {rejectWithVa
   try {
 
     const state = getState();
-    const token = state.user.userInfo.token;
+    const token = state.user.userInfo.user.token;
 
     const config = {
       headers: {
@@ -83,7 +83,7 @@ export const userDelete = createAsyncThunk('userDelete', async(id, {rejectWithVa
 
     const res = await axios.delete(`/api/users/${id}`,config)
     const {success} = res.data
-    let users = state.user.userList
+    let users = state.user.userList.list
     if(success){
       users =  users.filter((user)=> user._id !== id)
     }

@@ -7,20 +7,20 @@ import { signIn } from '../actions/userThunk';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
-export default function LoginPage({location, history}) {
+export default function LoginPage() {
 
   const dispatch = useDispatch()
-  const {userInfo,loading,error} = useSelector((state)=> state.user)
+  const {user,loading,error} = useSelector((state)=> state.user.userInfo)
   const [email, setEmail] = useState('')
   const [password,setPassword] = useState('')
 
   const navigate = useNavigate();
 
   useEffect(()=>{
-    if(userInfo){
+    if(user){
       navigate('/')
     }
-  }, [userInfo,navigate])
+  }, [user,navigate])
 
   const handleSubmit = (e) => {
     e.preventDefault()

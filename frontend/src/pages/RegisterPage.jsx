@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function RegisterPage() {
   const dispatch = useDispatch()
-  const {userInfo,loading,error} = useSelector((state)=> state.user)
+  const {user:userInfo,loading,error} = useSelector((state)=> state.user.userInfo)
   const initialState = {
     name: '',
     email: '',

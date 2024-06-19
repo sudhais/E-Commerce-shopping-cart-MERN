@@ -3,15 +3,15 @@ import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 import SearchBox from './SearchBox';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutSuccess } from '../reducers/userSlice';
+import { userReset } from '../reducers/userSlice';
 
 export default function Header() {
-  const { userInfo } = useSelector((state) => state.user);
+  const { user:userInfo } = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    dispatch(logoutSuccess());
+    dispatch(userReset());
     navigate('/login');
   };
 

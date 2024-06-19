@@ -10,7 +10,8 @@ import {listUser, userDelete} from '../actions/userThunk'
 export default function UserListPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const {userInfo, userList, loading, error} = useSelector((state)=> state.user)
+  const {user:userInfo} = useSelector((state)=> state.user.userInfo)
+  const {list:userList,loading,error} = useSelector((state)=> state.user.userList)
 
   useEffect(() => {
     if(userInfo && userInfo.isAdmin){
@@ -62,7 +63,7 @@ export default function UserListPage() {
                   <i className='fas fa-times' style={{color:'red'}}></i>
                 )}</td>
                 <td>
-                  <Link to='/'>
+                  <Link to={`/admin/user/${user._id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <i className='fas fa-edit'/>
                     </Button>

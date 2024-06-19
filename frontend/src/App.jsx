@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import UserListPage from './pages/UserListPage'
 import ProductListPage from './pages/ProductListPage'
+import UserEditPage from './pages/UserEditPage'
 
 
 
@@ -19,6 +20,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="/admin/userlist" Component={UserListPage}/>
+            <Route path="/admin/user/:id/edit" Component={UserEditPage}/>
             <Route path="/admin/productlist" Component={ProductListPage}/>
             <Route path="/login" Component={LoginPage}/>
             <Route path="/register" Component={RegisterPage}/>
