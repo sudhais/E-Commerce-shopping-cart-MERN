@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage'
 import UserListPage from './pages/UserListPage'
 import ProductListPage from './pages/ProductListPage'
 import UserEditPage from './pages/UserEditPage'
+import ProductEditPage from './pages/ProductEditPage'
 
 
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/admin/userlist" Component={UserListPage}/>
             <Route path="/admin/user/:id/edit" Component={UserEditPage}/>
             <Route path="/admin/productlist" Component={ProductListPage}/>
+            <Route path="/admin/product/:id/edit" Component={ProductEditPage} />
             <Route path="/login" Component={LoginPage}/>
             <Route path="/register" Component={RegisterPage}/>
             <Route path="/" Component={Home}/>

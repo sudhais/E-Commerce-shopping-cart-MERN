@@ -23,6 +23,10 @@ export default function ProductListPage() {
 
   }, [dispatch])
 
+  const handleCreateProduct = () => {
+    navigate(`/admin/product/${null}/edit`)
+  }
+
   return (
     <>
       <Row className='align-items-center'>
@@ -30,7 +34,7 @@ export default function ProductListPage() {
           <h1>Products</h1>
         </Col>
         <Col className='text-right'>
-          <Button className='my-3'>
+          <Button className='my-3' onClick={handleCreateProduct}>
             <i className='fas fa-plus'/> Create Product
           </Button>
         </Col>

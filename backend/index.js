@@ -31,7 +31,7 @@ app.use((req,res,next)=>{
 app.use("/api/users",userRoutes);
 app.use("/api/products",productRoutes)
 app.use("/api/orders", orderRoutes )
-app.use("api/upload", uploadRoutes)
+app.use("/api/upload", uploadRoutes)
 
 const _dirname = path.resolve();
 app.use("/uploads",express.static(path.join(_dirname, "/uploads")))

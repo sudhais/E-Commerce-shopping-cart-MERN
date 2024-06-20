@@ -6,8 +6,16 @@ const productList = {
   error: false,
   loading: false
 }
+
+const productDetails = {
+  details: null,
+  error: false,
+  loading: false
+}
+
 const initialState = {
   productList,
+  productDetails,
 }
 
 const productSlice = createSlice({
