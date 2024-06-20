@@ -3,9 +3,11 @@ import {persistReducer,persistStore} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import userReducer from './reducers/userSlice'
 import { thunk } from 'redux-thunk'
+import productReducer from  './reducers/productSlice'
 
 const rootReducer = combineReducers({
-  user:userReducer
+  user:userReducer,
+  product: productReducer
 })
 
 const persistconfig = {

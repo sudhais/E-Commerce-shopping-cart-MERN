@@ -104,9 +104,7 @@ const updateProfile = asyncHandler(async (req,res)=>{
     user.password = password
   }
 
-  console.log(user.password);
   const updatedUser = await user.save()
-  console.log(updatedUser.password);
 
   res.status(200).json({
     _id: updatedUser._id,

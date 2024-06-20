@@ -1,6 +1,7 @@
-import {asyncThunkCreator, createAsyncThunk} from "@reduxjs/toolkit"
+import {createAsyncThunk} from "@reduxjs/toolkit"
 import axios from "axios"
 import {testing} from '../reducers/userSlice'
+
 export const signIn= createAsyncThunk('user/login', async ({email,password}, {rejectWithValue,dispatch}) => {
   try {
 
