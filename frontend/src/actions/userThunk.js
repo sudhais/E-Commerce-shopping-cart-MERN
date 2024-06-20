@@ -122,6 +122,35 @@ export const getUserDetails = createAsyncThunk('userDetails', async(id,{rejectWi
     return rejectWithValue(message);
   }
 
+})
 
+export const updateUser = createAsyncThunk('updateUser', async({id,user},{rejectWithValue,getState}) => {
 
+  try {
+
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const res = await axios.put(
+      `/api/users/${id}`,
+      user,
+      config
+    )
+
+    const data = res.data
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
 })

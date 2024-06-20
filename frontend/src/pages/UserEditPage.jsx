@@ -6,7 +6,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { Button, Form } from 'react-bootstrap';
 import { userUpdateReset } from '../reducers/userSlice';
-import { getUserDetails } from '../actions/userThunk';
+import { getUserDetails, updateUser } from '../actions/userThunk';
 
 export default function UserEditPage() {
   const {id:userId} = useParams()
@@ -38,7 +38,7 @@ export default function UserEditPage() {
         })
       }
     }
-  },[dispatch,navigate,userId,user])
+  },[dispatch,navigate,userId,user,successUpdate])
 
   const handleChange = (e) => {
     const {id,value, type, checked} = e.target
@@ -50,18 +50,23 @@ export default function UserEditPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    
+    dispatch(updateUser({id:userId,user:formData}))
+  }
+
+  const handleGoBack = () => {
+    dispatch(userUpdateReset())
+    navigate('/admin/userlist')
   }
 
   return (
     <>
-      <Link to='/admin/userlist' className='btn btn-light my-3'>
+      <Button onClick={handleGoBack} className='btn btn-light my-3'>
         Go back
-      </Link>
+      </Button>
       <FormContainer>
         <h1>Edit User</h1>
         {loadingUpdate && <Loader/>}
-        {errorUpdate && <Message variant={'danger'}>{error}</Message>}
+        {errorUpdate && <Message variant={'danger'}>{errorUpdate}</Message>}
 
         {loading ? (
           <Loader/>

@@ -4,7 +4,8 @@ import {
   signUp,
   listUser,
   userDelete,
-  getUserDetails
+  getUserDetails,
+  updateUser
 } from '../actions/userThunk'
 
 const userInfo = {
@@ -123,6 +124,25 @@ const userSlice = createSlice({
       .addCase(getUserDetails.rejected, (state, action) => {
         state.userDetails.loading = false;
         state.userDetails.error = action.payload
+      })
+      .addCase(updateUser.pending, (state)=> {
+        state.userUpdate.loading = true;
+        state.userUpdate.error = false;
+      })
+      .addCase(updateUser.fulfilled, (state,action)=> {
+        state.userList.list = state.userList.list.map((user)=> {
+          if(user._id === action.payload._id){
+            return user = action.payload
+          }
+          return user
+        } )
+        state.userDetails.details = action.payload
+        state.userUpdate.successUpdate = true;
+        state.userUpdate.loading = false;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.userUpdate.loading = false;
+        state.userUpdate.error = action.payload
       })
   } 
   

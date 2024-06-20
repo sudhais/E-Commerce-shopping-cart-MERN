@@ -80,7 +80,8 @@ const authUser = asyncHandler(async (req,res) => {
 
 //@access private
 const updateProfile = asyncHandler(async (req,res)=>{
-  const {name, email, password} = req.body
+  const {name, email, password, isAdmin} = req.body
+  const isUserAdmin = req.user.isAdmin ? true : false
   const user = await UserModel.findById(req.user._id)
   if(!user){
     res.status(404)
@@ -96,7 +97,9 @@ const updateProfile = asyncHandler(async (req,res)=>{
     }
     user.email = email
   }
-  console.log(user.password);
+  if(isUserAdmin){
+    user.isAdmin = isAdmin
+  }
   if(password && !(user.matchPassword(password)))
     user.password = password
 
@@ -152,7 +155,7 @@ const updateUser = asyncHandler(async (req,res)=>{
     throw new Error('invalid user id')
   }
 
-  req.user = {_id:id}
+  req.user = {_id:id, isAdmin:true}
   await updateProfile(req,res)
 
 })
