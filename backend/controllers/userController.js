@@ -100,10 +100,13 @@ const updateProfile = asyncHandler(async (req,res)=>{
   if(isUserAdmin){
     user.isAdmin = isAdmin
   }
-  if(password && !(user.matchPassword(password)))
+  if(password && !(user.matchPassword(password))){
     user.password = password
+  }
 
+  console.log(user.password);
   const updatedUser = await user.save()
+  console.log(updatedUser.password);
 
   res.status(200).json({
     _id: updatedUser._id,
