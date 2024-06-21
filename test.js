@@ -1,20 +1,49 @@
-const data = {
-  id: "1234",
-  reviews: [
-    {
-      name:"what",
-      rating:4,
-      user:new ObjectId('66699a12f48ae1eae220713a'),
-      comment:"sdfhsdf"
-    },
-    {
-      name:"what",
-      rating:4,
-      user:new ObjectId('66699a12f48ae1eae2207137'),
-      comment:"sdfhsdf"
-    },
-  ]
+
+
+const keyword1 = 'check'
+const rating1 = null
+const minPrice1 = undefined
+const maxPrice1 = 1000
+
+const keyword = keyword1 ? {
+  name: {
+    $regex: keyword1,
+    $options: "i",
+  },
+} : {};
+
+const rating = rating1 ? {
+rating : {
+  $gte : Number(rating1)
+},
+} : {}
+
+const minPrice = minPrice1 ? {
+price : {
+  $gte : Number(minPrice1)
+},
+} : {}
+
+const maxPrice = maxPrice1 ? {
+price : {
+  $lte : Number(maxPrice1)
+},
+} : {}
+
+const price = (minPrice1 || maxPrice1) ? {
+  price: {
+    ...(minPrice1 && { $gte: Number(minPrice1) }),
+    ...(maxPrice1 && { $lte: Number(maxPrice1) }),
+  },
+} : {};
+
+const filters = {
+...keyword,
+...rating,
+...price
 }
 
-const result = data.reviews.length !== 0 ? data.reviews.some((r) => r.user.toString() === '66699a12f48ae1eae2207137') : false
-console.log(result);
+// console.log(minPrice);
+// console.log(maxPrice);
+// console.log(price);
+console.log(filters);

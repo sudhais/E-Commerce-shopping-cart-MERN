@@ -15,10 +15,33 @@ export const getProducts = asyncHandler(async (req,res) => {
         $options: "i",
       },
     } : {};
-    
-  const count = await ProductModel.countDocuments({...keyword})
 
-  const products = await ProductModel.find({...keyword})
+  const rating = req.query.rating ? {
+    rating : {
+      $gte : Number(req.query.rating)
+    },
+  } : {}
+
+  const minPrice = req.query.minPrice ? true : false
+
+  const maxPrice = req.query.maxPrice ? true : false
+
+  const price = (req.query.minPrice || req.query.maxPrice) ? {
+    price: {
+      ...(minPrice && { $gte: Number(req.query.minPrice) }),
+      ...(maxPrice && { $lte: Number(req.query.maxPrice) }),
+    }
+  } : {}
+
+  const filters = {
+    ...keyword,
+    ...rating,
+    ...price
+  }
+  
+  const count = await ProductModel.countDocuments({...filters})
+
+  const products = await ProductModel.find({...filters})
     .limit(pageSize)
     .skip(pageSize * (page-1))
   if(products){
