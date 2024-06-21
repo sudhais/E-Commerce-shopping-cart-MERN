@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {listProducts} from '../actions/productThunk'
+import {
+  listProducts,
+  createProduct,
+  proDetails
+} from '../actions/productThunk'
 
 const productList = {
   list: [],
@@ -13,9 +17,16 @@ const productDetails = {
   loading: false
 }
 
+const productCreate = {
+  loading: false,
+  error: false,
+  successCreate: false
+}
+
 const initialState = {
   productList,
   productDetails,
+  productCreate
 }
 
 const productSlice = createSlice({
@@ -24,6 +35,9 @@ const productSlice = createSlice({
   reducers:{
     productListReset:(state) => {
       state.productList = productList;
+    },
+    productCreateReset:(state) => {
+      state.productCreate = productCreate
     }
   },
   extraReducers: (build) => {
@@ -40,11 +54,40 @@ const productSlice = createSlice({
         state.productList.error = action.payload;
         state.productList.loading = false
       })
+
+      .addCase(createProduct.pending, (state) => {
+        state.productCreate.loading = true;
+        state.productCreate.error = false;
+        state.productCreate.successCreate = false;
+      })
+      .addCase(createProduct.fulfilled, (state,action) => {
+        state.productList.list = [...state.productList.list, action.payload]
+        state.productCreate.loading = false
+        state.productCreate.successCreate = true
+      })
+      .addCase(createProduct.rejected, (state,action) => {
+        state.productCreate.error = action.payload;
+        state.productCreate.loading = false
+      })
+
+      .addCase(proDetails.pending, (state) => {
+        state.productDetails.loading = true;
+        state.productDetails.error = false;
+      })
+      .addCase(proDetails.fulfilled, (state,action) => {
+        state.productDetails.loading = false
+        state.productDetails.details = action.payload
+      })
+      .addCase(proDetails.rejected, (state,action) => {
+        state.productDetails.error = action.payload;
+        state.productDetails.loading = false
+      })
+
   }
 })
 
 export const {
-
+  productCreateReset
 } = productSlice.actions
 
 export default productSlice.reducer

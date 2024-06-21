@@ -45,9 +45,7 @@ export const getProductById = asyncHandler(async (req,res) => {
 
   const product = await ProductModel.findById(id)
   if(product){
-    res.status(200).json({
-      product
-    })
+    res.status(200).json(product)
   }else{
     res.status(400)
     throw new Error('product not found')
@@ -148,10 +146,7 @@ export const createProduct = asyncHandler(async (req,res) => {
     res.status(400)
     throw new Error('cannot be created')
   }
-  res.status(201).json({
-    message: 'successfully created',
-    product:iscreated
-  })
+  res.status(201).json(iscreated)
 
 })
 

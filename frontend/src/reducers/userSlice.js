@@ -60,7 +60,7 @@ const userSlice = createSlice({
       state.userUpdate = userUpdate;
     },
     testing: (state) => {
-      console.log('working');
+      // console.log('working');
     }
   },
   extraReducers: (build) => {

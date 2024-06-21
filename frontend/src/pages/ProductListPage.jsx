@@ -67,7 +67,7 @@ export default function ProductListPage() {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <Link to={`/`}>
+                    <Link to={`/admin/product/${product._id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'/>
                       </Button>
