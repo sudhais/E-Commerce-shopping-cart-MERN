@@ -8,7 +8,7 @@ export const listProducts = createAsyncThunk('listProducts', async (pageNumber, 
     const keyword = ''
     pageNumber = pageNumber ? pageNumber : 1
 
-    const {data:products} = await axios.get(`/api/products`)
+    const {data:products} = await axios.get(`/api/products?${keyword}&${pageNumber}`)
     // const {products} = res.data
     return products
     
@@ -35,7 +35,7 @@ export const createProduct = createAsyncThunk('createProduct', async({formData:p
     };
 
     const res = await axios.post(
-      `/api/products?${keyword}&${pageNumber}`,
+      `/api/products`,
       product,
       config
     )
@@ -94,6 +94,34 @@ export const editProduct = createAsyncThunk('editProduct', async({id,formData},{
     return data;
     
   } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+    
+  }
+})
+
+export const deleteProduct = createAsyncThunk('deleteProduct', async(id,{rejectWithValue,getState}) => {
+
+  try {
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    const {data} = await axios.delete(
+      `/api/products/${id}`,
+      config
+    )
+    return data.product;
+    
+  } catch (error) {
+
     const message = error.response && error.response.data.message 
       ? error.response.data.message 
       : error.message;

@@ -77,6 +77,7 @@ const userSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.error = action.payload
       })
+
       .addCase(signUp.pending, (state)=> {
         state.userInfo.loading = true;
         state.userInfo.error = false;
@@ -89,6 +90,7 @@ const userSlice = createSlice({
         state.userInfo.loading = false;
         state.userInfo.error = action.payload
       })
+
       .addCase(listUser.pending, (state)=> {
         state.userList.loading = true;
         state.userList.error = false;
@@ -101,6 +103,7 @@ const userSlice = createSlice({
         state.userList.loading = false;
         state.userList.error = action.payload
       })
+
       .addCase(userDelete.pending, (state)=> {
         state.userList.loading = true;
         state.userList.error = false;
@@ -113,6 +116,7 @@ const userSlice = createSlice({
         state.userList.loading = false;
         state.userList.error = action.payload
       })
+      
       .addCase(getUserDetails.pending, (state)=> {
         state.userDetails.loading = true;
         state.userDetails.error = false;
@@ -125,6 +129,7 @@ const userSlice = createSlice({
         state.userDetails.loading = false;
         state.userDetails.error = action.payload
       })
+      
       .addCase(updateUser.pending, (state)=> {
         state.userUpdate.loading = true;
         state.userUpdate.error = false;

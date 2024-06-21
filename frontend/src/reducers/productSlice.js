@@ -3,7 +3,8 @@ import {
   listProducts,
   createProduct,
   proDetails,
-  editProduct
+  editProduct,
+  deleteProduct
 } from '../actions/productThunk'
 
 const productList = {
@@ -26,10 +27,16 @@ const productCreate = {
   successCreate: false
 }
 
+const productDelete = {
+  loading: false,
+  error: false
+}
+
 const initialState = {
   productList,
   productDetails,
-  productCreate
+  productCreate,
+  productDelete
 }
 
 const productSlice = createSlice({
@@ -46,6 +53,7 @@ const productSlice = createSlice({
       state.productList = productList;
       state.productDetails = productDetails;
       state.productCreate = productCreate;
+      state.productDelete = productDelete;
     }
   },
   extraReducers: (build) => {
@@ -111,6 +119,19 @@ const productSlice = createSlice({
       .addCase(editProduct.rejected, (state,action) => {
         state.productCreate.error = action.payload;
         state.productCreate.loading = false
+      })
+
+      .addCase(deleteProduct.pending, (state) => {
+        state.productDelete.loading = true;
+        state.productDelete.error = false;
+      })
+      .addCase(deleteProduct.fulfilled, (state,action) => {
+        state.productList.list = state.productList.list.filter((product) => product._id !== action.payload._id)
+        state.productDelete.loading = false
+      })
+      .addCase(deleteProduct.rejected, (state,action) => {
+        state.productDelete.loading = false
+        state.productDelete.error = action.payload;
       })
 
   }

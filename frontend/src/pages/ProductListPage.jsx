@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { listProducts } from '../actions/productThunk'
+import { deleteProduct, listProducts } from '../actions/productThunk'
 import Paginate from '../components/Paginate'
 
 export default function ProductListPage() {
@@ -12,6 +12,7 @@ export default function ProductListPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {loading, error, list:products,page,pages} = useSelector((state)=> state.product.productList)
+  const {loading: loadingDelete, error : errorDelete} = useSelector((state)=> state.product.productDelete)
   const {user:userInfo} = useSelector((state) => state.user.userInfo)
 
   useEffect(() => {
@@ -28,6 +29,11 @@ export default function ProductListPage() {
     navigate(`/admin/product/${null}/edit`)
   }
 
+  const handleDelete = (id) => {
+    if(window.confirm('are you sure'))
+      dispatch(deleteProduct(id))
+  }
+
   return (
     <>
       <Row className='align-items-center'>
@@ -40,7 +46,8 @@ export default function ProductListPage() {
           </Button>
         </Col>
       </Row>
-
+      {loadingDelete && <Loader/>}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loading ? (
         <Loader />
       ): error ? (
@@ -76,7 +83,7 @@ export default function ProductListPage() {
                     <Button 
                       variant='danger' 
                       className='btn-sm'
-                      
+                      onClick={() => handleDelete(product._id)}
                     >
                       <i className='fas fa-trash'/>
                     </Button>
