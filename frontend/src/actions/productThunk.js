@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const listProducts = createAsyncThunk('listProducts', async (_, {rejectWithValue}) => {
+export const listProducts = createAsyncThunk('listProducts', async (pageNumber, {rejectWithValue}) => {
 
   try {
 
-    // keyword = keyword ? keyword : ''
-    // pageNumber = pageNumber ? pageNumber : ''
+    const keyword = ''
+    pageNumber = pageNumber ? pageNumber : 1
 
-    const res = await axios.get(`/api/products`)
-    const {products} = res.data
+    const {data:products} = await axios.get(`/api/products`)
+    // const {products} = res.data
     return products
     
   } catch (error) {
@@ -35,7 +35,7 @@ export const createProduct = createAsyncThunk('createProduct', async({formData:p
     };
 
     const res = await axios.post(
-      '/api/products',
+      `/api/products?${keyword}&${pageNumber}`,
       product,
       config
     )

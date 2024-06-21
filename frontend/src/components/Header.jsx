@@ -4,6 +4,7 @@ import SearchBox from './SearchBox';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userReset } from '../reducers/userSlice';
+import { productReset } from '../reducers/productSlice';
 
 export default function Header() {
   const { user:userInfo } = useSelector((state) => state.user.userInfo);
@@ -12,6 +13,7 @@ export default function Header() {
 
   const logoutHandler = () => {
     dispatch(userReset());
+    dispatch(productReset())
     navigate('/login');
   };
 

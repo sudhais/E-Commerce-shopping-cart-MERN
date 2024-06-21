@@ -104,7 +104,9 @@ export default function ProductEditPage() {
   }
 
   const handleGoBack = () => {
-    dispatch(productCreateReset())
+    if(errorCreate)
+      dispatch(productCreateReset())
+      
     navigate('/admin/productlist')
   }
 

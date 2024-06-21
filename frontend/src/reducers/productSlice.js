@@ -8,6 +8,8 @@ import {
 
 const productList = {
   list: [],
+  page:1,
+  pages:1,
   error: false,
   loading: false
 }
@@ -39,6 +41,11 @@ const productSlice = createSlice({
     },
     productCreateReset:(state) => {
       state.productCreate = productCreate
+    },
+    productReset: (state) => {
+      state.productList = productList;
+      state.productDetails = productDetails;
+      state.productCreate = productCreate;
     }
   },
   extraReducers: (build) => {
@@ -48,12 +55,14 @@ const productSlice = createSlice({
         state.productList.error = false;
       })
       .addCase(listProducts.fulfilled, (state,action) => {
-        state.productList.list = action.payload;
-        state.productList.loading = false
+        state.productList.list = action.payload.products;
+        state.productList.page = action.payload.page;
+        state.productList.pages = action.payload.pages;
+        state.productList.loading = false;
       })
       .addCase(listProducts.rejected, (state,action) => {
         state.productList.error = action.payload;
-        state.productList.loading = false
+        state.productList.loading = false;
       })
 
       .addCase(createProduct.pending, (state) => {
@@ -108,7 +117,9 @@ const productSlice = createSlice({
 })
 
 export const {
-  productCreateReset
+  productCreateReset,
+  productReset,
+  productListReset
 } = productSlice.actions
 
 export default productSlice.reducer

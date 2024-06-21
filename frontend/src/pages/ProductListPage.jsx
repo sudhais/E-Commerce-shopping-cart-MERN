@@ -3,14 +3,15 @@ import {Row,Col, Button, Table} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { listProducts } from '../actions/productThunk'
+import Paginate from '../components/Paginate'
 
 export default function ProductListPage() {
-
+  const {pageNumber} = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const {loading, error, list:products} = useSelector((state)=> state.product.productList)
+  const {loading, error, list:products,page,pages} = useSelector((state)=> state.product.productList)
   const {user:userInfo} = useSelector((state) => state.user.userInfo)
 
   useEffect(() => {
@@ -19,9 +20,7 @@ export default function ProductListPage() {
       navigate('/login')
 
     if(!products.length)
-      dispatch(listProducts())
-    
-
+      dispatch(listProducts(pageNumber))
 
   }, [dispatch,navigate,userInfo,products.length])
 
@@ -87,6 +86,7 @@ export default function ProductListPage() {
 
             </tbody>
           </Table>
+          <Paginate pages={pages} page={page} isAdmin={true} />
         </>
       )}
 

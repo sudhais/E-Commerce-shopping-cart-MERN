@@ -9,6 +9,7 @@ import UserListPage from './pages/UserListPage'
 import ProductListPage from './pages/ProductListPage'
 import UserEditPage from './pages/UserEditPage'
 import ProductEditPage from './pages/ProductEditPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 
 
@@ -20,13 +21,17 @@ function App() {
       <main className='py-3'>
         <Container>
           <Routes>
-            <Route path="/admin/userlist" Component={UserListPage}/>
-            <Route path="/admin/user/:id/edit" Component={UserEditPage}/>
-            <Route path="/admin/productlist" Component={ProductListPage}/>
-            <Route path="/admin/product/:id/edit" Component={ProductEditPage} />
-            <Route path="/login" Component={LoginPage}/>
-            <Route path="/register" Component={RegisterPage}/>
-            <Route path="/" Component={Home}/>
+            <Route path="/admin/userlist" element={<UserListPage/>} />
+            <Route path="/admin/user/:id/edit" element={<UserEditPage/>}/>
+            <Route path="/admin/productlist" element={<ProductListPage/>}/>
+            <Route path="/admin/productlist/:pageNumber" element={<ProductListPage/>}/>
+            <Route path="/admin/product/:id/edit" element={<ProductEditPage/>} />
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
+            <Route path='/search/:keyword/page/:pageNumber' element={<Home/>}/>
+            <Route path='/page/:pageNumber' element={<Home/>}/>
+            <Route path="/" element={<Home/>}/>
+            <Route path="*" element={<NotFoundPage/>} />
           </Routes>
         </Container>
       </main>
