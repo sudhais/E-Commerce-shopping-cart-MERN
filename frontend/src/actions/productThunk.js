@@ -69,3 +69,35 @@ export const proDetails = createAsyncThunk('productDetails', async(id,{rejectWit
     return rejectWithValue(message);
   }
 }) 
+
+
+export const editProduct = createAsyncThunk('editProduct', async({id,formData},{rejectWithValue,getState}) => {
+
+  try {
+
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const {data} = await axios.put(
+      `/api/products/${id}`,
+      formData,
+      config
+    )
+    
+    return data;
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+    
+  }
+})

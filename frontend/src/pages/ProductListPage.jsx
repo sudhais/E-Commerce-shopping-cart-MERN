@@ -17,11 +17,13 @@ export default function ProductListPage() {
 
     if(!userInfo || !userInfo.isAdmin)
       navigate('/login')
+
+    if(!products.length)
+      dispatch(listProducts())
     
-    dispatch(listProducts())
 
 
-  }, [dispatch])
+  }, [dispatch,navigate,userInfo,products.length])
 
   const handleCreateProduct = () => {
     navigate(`/admin/product/${null}/edit`)

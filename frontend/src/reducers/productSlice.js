@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   listProducts,
   createProduct,
-  proDetails
+  proDetails,
+  editProduct
 } from '../actions/productThunk'
 
 const productList = {
@@ -81,6 +82,26 @@ const productSlice = createSlice({
       .addCase(proDetails.rejected, (state,action) => {
         state.productDetails.error = action.payload;
         state.productDetails.loading = false
+      })
+
+      .addCase(editProduct.pending, (state) => {
+        state.productCreate.loading = true;
+        state.productCreate.error = false;
+        state.productCreate.successCreate = false;
+      })
+      .addCase(editProduct.fulfilled, (state,action) => {
+        state.productList.list = state.productList.list.map((product) => {
+          if(product._id === action.payload._id)
+            return action.payload
+          else
+            return product
+        })
+        state.productCreate.loading = false
+        state.productCreate.successCreate = true
+      })
+      .addCase(editProduct.rejected, (state,action) => {
+        state.productCreate.error = action.payload;
+        state.productCreate.loading = false
       })
 
   }

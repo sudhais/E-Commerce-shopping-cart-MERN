@@ -6,7 +6,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { Button, Form } from 'react-bootstrap'
 import axios from 'axios'
-import { createProduct, proDetails } from '../actions/productThunk'
+import { createProduct, editProduct, proDetails } from '../actions/productThunk'
 import { productCreateReset } from '../reducers/productSlice'
 
 export default function ProductEditPage() {
@@ -37,7 +37,7 @@ export default function ProductEditPage() {
       navigate('/admin/productlist')
     }else{
       if(id !== 'null'){
-        if(!product|| product._id !== id)
+        if(!product || product._id !== id)
           dispatch(proDetails(id))
         else{
           setFormData({
@@ -98,6 +98,8 @@ export default function ProductEditPage() {
     e.preventDefault()
     if(id === 'null'){
       dispatch(createProduct({formData}))
+    }else{
+      dispatch(editProduct({id,formData}))
     }
   }
 

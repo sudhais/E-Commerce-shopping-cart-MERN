@@ -220,10 +220,7 @@ export const updateProductById = asyncHandler(async (req,res) => {
   const updatedProduct = await ProductModel.findByIdAndUpdate(id,product, {new:true})
 
   if(updatedProduct)
-    res.status(200).json({
-      message: 'succesfully updated',
-      product: updatedProduct
-    })
+    res.status(200).json(updatedProduct)
   else{
     res.status(400)
     throw new Error('failed to update')
