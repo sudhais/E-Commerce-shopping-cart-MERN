@@ -10,9 +10,3 @@ export default function Meta({title,description,keywords}) {
     </Helmet>
   )
 }
-
-Meta.defaultProps = {
-  title: 'welcome to Product shop',
-  description: 'We sell the best products for cheap',
-  keywords: 'electronics, buy electronics, cheap electroincs',
-}

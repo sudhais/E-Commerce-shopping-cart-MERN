@@ -4,7 +4,8 @@ import {
   createProduct,
   proDetails,
   editProduct,
-  deleteProduct
+  deleteProduct,
+  topRatedProducts
 } from '../actions/productThunk'
 
 const productList = {
@@ -13,6 +14,12 @@ const productList = {
   pages:1,
   error: false,
   loading: false
+}
+
+const productTopRated =  {
+  products: [],
+  error:false,
+  loading:false
 }
 
 const productDetails = {
@@ -34,6 +41,7 @@ const productDelete = {
 
 const initialState = {
   productList,
+  productTopRated,
   productDetails,
   productCreate,
   productDelete
@@ -54,6 +62,7 @@ const productSlice = createSlice({
       state.productDetails = productDetails;
       state.productCreate = productCreate;
       state.productDelete = productDelete;
+      state.productTopRated = productTopRated;
     }
   },
   extraReducers: (build) => {
@@ -71,6 +80,19 @@ const productSlice = createSlice({
       .addCase(listProducts.rejected, (state,action) => {
         state.productList.error = action.payload;
         state.productList.loading = false;
+      })
+
+      .addCase(topRatedProducts.pending, (state) => {
+        state.productTopRated.loading = true;
+        state.productTopRated.error = false;
+      })
+      .addCase(topRatedProducts.fulfilled, (state,action) => {
+        state.productTopRated.products = action.payload;
+        state.productTopRated.loading = false;
+      })
+      .addCase(topRatedProducts.rejected, (state,action) => {
+        state.productTopRated.error = action.payload;
+        state.productTopRated.loading = false;
       })
 
       .addCase(createProduct.pending, (state) => {

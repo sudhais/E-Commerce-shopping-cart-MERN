@@ -82,9 +82,7 @@ export const getTopProducts = asyncHandler(async (req,res) => {
 
   const product = await ProductModel.find({}).sort({rating:-1}).limit(3)
   if(product){
-    res.status(200).json({
-      product
-    })
+    res.status(200).json(product)
   }else{
     res.status(500)
     throw new Error('something went wrong please try again later')

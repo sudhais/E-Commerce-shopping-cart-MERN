@@ -20,6 +20,21 @@ export const listProducts = createAsyncThunk('listProducts', async (pageNumber, 
   }
 })
 
+export const topRatedProducts = createAsyncThunk('topRatedProducts', async (_, {rejectWithValue}) => {
+
+  try {
+    const {data} = await axios.get(`/api/products/top`)
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+})
+
+
 export const createProduct = createAsyncThunk('createProduct', async({formData:product},{rejectWithValue, getState}) => {
 
   try {
