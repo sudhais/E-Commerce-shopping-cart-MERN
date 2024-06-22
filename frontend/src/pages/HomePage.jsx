@@ -8,10 +8,12 @@ import Loader from '../components/Loader'
 import { listProducts } from '../actions/productThunk'
 import Message from '../components/Message'
 import Rating from '../components/Rating'
+import Paginate from '../components/Paginate'
 
 export default function HomePage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const {pageNumber} = useParams()
   const {user:userInfo} = useSelector((state) => state.user.userInfo)
   const {loading, error, list:products,page,pages} = useSelector((state)=> state.product.productList)
   const {keyword} = useParams()
@@ -24,10 +26,10 @@ export default function HomePage() {
     if(!userInfo)
       navigate('/login')
 
-    dispatch(listProducts({priceRange,minRating,category}))
+    dispatch(listProducts({keyword,pageNumber,priceRange,minRating,category}))
 
 
-  }, [userInfo,priceRange,minRating,category])
+  }, [navigate,dispatch,userInfo,priceRange,minRating,category,pageNumber])
 
 
 
@@ -134,6 +136,11 @@ export default function HomePage() {
               </Row>
             </>
           )}
+          <Paginate 
+            pages={pages}
+            page={page}
+            keyword={keyword ? keyword : ''}
+          />
         </Col>
       </Row>
     </>

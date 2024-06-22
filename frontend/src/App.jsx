@@ -29,6 +29,7 @@ function App() {
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/register" element={<RegisterPage/>}/>
             <Route path='/search/:keyword/page/:pageNumber' element={<Home/>}/>
+            <Route path='/search/:keyword' element={<Home/>}/>
             <Route path='/page/:pageNumber' element={<Home/>}/>
             <Route path="/" element={<Home/>}/>
             <Route path="*" element={<NotFoundPage/>} />

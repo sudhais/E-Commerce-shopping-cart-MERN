@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const listProducts = createAsyncThunk('listProducts', async (
-  {keyword= '',pageNumber = 1, priceRange='', minRating : rating ='', category=''}, 
+  {keyword= '',pageNumber=1, priceRange='', minRating : rating ='', category=''}, 
   {rejectWithValue}) => {
 
   try {
