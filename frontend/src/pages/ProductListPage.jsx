@@ -20,10 +20,9 @@ export default function ProductListPage() {
     if(!userInfo || !userInfo.isAdmin)
       navigate('/login')
 
-    if(!products.length)
-      dispatch(listProducts({pageNumber}))
+    dispatch(listProducts({pageNumber}))
 
-  }, [userInfo,products.length])
+  }, [dispatch,navigate,userInfo])
 
   const handleCreateProduct = () => {
     navigate(`/admin/product/${null}/edit`)
