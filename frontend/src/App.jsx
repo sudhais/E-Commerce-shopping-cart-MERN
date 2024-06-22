@@ -10,6 +10,7 @@ import ProductListPage from './pages/ProductListPage'
 import UserEditPage from './pages/UserEditPage'
 import ProductEditPage from './pages/ProductEditPage'
 import NotFoundPage from './pages/NotFoundPage'
+import ProductPage from './pages/ProductPage'
 
 
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/admin/productlist" element={<ProductListPage/>}/>
             <Route path="/admin/productlist/:pageNumber" element={<ProductListPage/>}/>
             <Route path="/admin/product/:id/edit" element={<ProductEditPage/>} />
+            <Route path="/product/:id" element={<ProductPage/>} />
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/register" element={<RegisterPage/>}/>
             <Route path='/search/:keyword/page/:pageNumber' element={<Home/>}/>

@@ -23,13 +23,9 @@ export default function HomePage() {
 
   useEffect(() => {
 
-    if(!userInfo)
-      navigate('/login')
-
     dispatch(listProducts({keyword,pageNumber,priceRange,minRating,category}))
-
-
-  }, [navigate,dispatch,userInfo,priceRange,minRating,category,pageNumber])
+    
+  }, [navigate,dispatch,priceRange,minRating,category,pageNumber])
 
 
 
@@ -114,11 +110,11 @@ export default function HomePage() {
                 {products.map((product) => (
                   <Col key={product._id} sm={12} md={6} lg={4} xl={4}>
                     <Card className="my-3 p-3 rounded">
-                      <Link to={'/'}>
-                        <Card.Img src={product.image} />
+                      <Link to={`/product/${product._id}`}>
+                        <Card.Img src={product.image} variant='top'/>
                       </Link>
                       <Card.Body >
-                        <Link to={'/'}>
+                        <Link to={`/product/${product._id}`}>
                           <strong>{product.name}</strong>
                         </Link>
                       
