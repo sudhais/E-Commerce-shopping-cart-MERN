@@ -10,13 +10,7 @@ export const listProducts = createAsyncThunk('listProducts', async (
     const minPrice = priceRange ? priceRange.split('-')[0] : ''
     const maxPrice = priceRange ? priceRange.split('-')[1] : ''
 
-
-
-    console.log(rating,maxPrice);
-
-
     const {data:products} = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}&rating=${rating}&minPrice=${minPrice}&maxPrice=${maxPrice}&category=${category}`)
-    // const {products} = res.data
     return products
     
   } catch (error) {

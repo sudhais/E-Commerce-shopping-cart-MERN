@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Meta from '../components/Meta'
 import ProductCarousel from '../components/ProductCarousel'
-import { Col, Form, Row } from 'react-bootstrap'
+import { Card, Col, Form, Row } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import { listProducts } from '../actions/productThunk'
+import Message from '../components/Message'
+import Rating from '../components/Rating'
 
 export default function HomePage() {
   const navigate = useNavigate()
@@ -100,7 +102,38 @@ export default function HomePage() {
         </Col>
 
         <Col md={9}>
-          {/* {load} */}
+          {loading ? (
+            <Loader/>
+          ) : error ? (
+            <Message variant={'danger'} >{error}</Message>
+          ) : (
+            <>
+              <Row>
+                {products.map((product) => (
+                  <Col key={product._id} sm={12} md={6} lg={4} xl={4}>
+                    <Card className="my-3 p-3 rounded">
+                      <Link to={'/'}>
+                        <Card.Img src={product.image} />
+                      </Link>
+                      <Card.Body >
+                        <Link to={'/'}>
+                          <strong>{product.name}</strong>
+                        </Link>
+                      
+                        <Card.Text as='div'>
+                          <Rating
+                            value={product.rating}
+                            text= {`${product.numReviews} reviews`}
+                          />
+                        </Card.Text>
+                        <Card.Text as='h3' >${product.price}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </>
+          )}
         </Col>
       </Row>
     </>
