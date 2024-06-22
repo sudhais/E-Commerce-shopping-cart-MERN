@@ -1,14 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const listProducts = createAsyncThunk('listProducts', async (pageNumber, {rejectWithValue}) => {
+export const listProducts = createAsyncThunk('listProducts', async (
+  {keyword= '',pageNumber = 1, priceRange='', minRating : rating ='', category=''}, 
+  {rejectWithValue}) => {
 
   try {
 
-    const keyword = ''
-    pageNumber = pageNumber ? pageNumber : 1
+    const minPrice = priceRange ? priceRange.split('-')[0] : ''
+    const maxPrice = priceRange ? priceRange.split('-')[1] : ''
 
-    const {data:products} = await axios.get(`/api/products?${keyword}&${pageNumber}`)
+
+
+    console.log(rating,maxPrice);
+
+
+    const {data:products} = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}&rating=${rating}&minPrice=${minPrice}&maxPrice=${maxPrice}&category=${category}`)
     // const {products} = res.data
     return products
     

@@ -21,9 +21,9 @@ export default function ProductListPage() {
       navigate('/login')
 
     if(!products.length)
-      dispatch(listProducts(pageNumber))
+      dispatch(listProducts({pageNumber}))
 
-  }, [dispatch,navigate,userInfo,products.length])
+  }, [userInfo,products.length])
 
   const handleCreateProduct = () => {
     navigate(`/admin/product/${null}/edit`)

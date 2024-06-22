@@ -10,11 +10,20 @@ export const getProducts = asyncHandler(async (req,res) => {
   const page = Number(req.query.pageNumber) || 1;
 
   const keyword = req.query.keyword ? {
-      name: {
-        $regex: req.query.keyword,
-        $options: "i",
-      },
-    } : {};
+    name: {
+      $regex: req.query.keyword,
+      $options: "i",
+    },
+  } : {};
+
+  const category = req.query.category
+    ? {
+        category: {
+          $regex: req.query.category,
+          $options: "i",
+        },
+      }
+    : {};
 
   const rating = req.query.rating ? {
     rating : {
@@ -35,6 +44,7 @@ export const getProducts = asyncHandler(async (req,res) => {
 
   const filters = {
     ...keyword,
+    ...category,
     ...rating,
     ...price
   }
