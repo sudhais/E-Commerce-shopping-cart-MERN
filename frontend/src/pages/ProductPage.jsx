@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-import { proDetails } from '../actions/productThunk'
+import { createProductReview, proDetails } from '../actions/productThunk'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Meta from '../components/Meta'
 import { Button, Card, Col, Form, Image, ListGroup, Row } from 'react-bootstrap'
 import Rating from '../components/Rating'
+import {productReviewCreateReset} from '../reducers/productSlice'
 
 export default function ProductPage() {
   const dispatch = useDispatch()
   const {id} = useParams()
   const {loading,error,details:product} = useSelector((state) => state.product.productDetails) 
+  const {success, error:errorReview} = useSelector((state) => state.product.productReviewCreate)
   const {user:userInfo} = useSelector((state) => state.user.userInfo) 
 
   const [qty, setQty] = useState(0)
@@ -19,13 +21,27 @@ export default function ProductPage() {
   const [comment, setComment] = useState('')
 
   useEffect(() => {
-    
     dispatch(proDetails(id))
-  }, [dispatch,product])
+  }, [dispatch, id])
+
+  useEffect(() => {
+    if (success) {
+      alert("Review Submitted")
+      setRating(0)
+      setComment('')
+      dispatch(productReviewCreateReset())
+      dispatch(proDetails(id))
+    }
+  }, [dispatch, success])
 
 
   const handleAddToCart = () => {
 
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    dispatch(createProductReview({id,rating,comment}))
   }
 
   return (
@@ -125,8 +141,11 @@ export default function ProductPage() {
                   ))}
                   <ListGroup.Item>
                     <h2>Write a Customer Review</h2>
+                    {errorReview && (
+                      <Message variant='danger'>{errorReview}</Message>
+                    )}
                     {userInfo ? (
-                      <Form >
+                      <Form onSubmit={handleSubmit}>
                         <Form.Group controlId='rating'>
                           <Form.Label>Rating</Form.Label>
                           <Form.Control

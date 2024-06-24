@@ -5,7 +5,8 @@ import {
   proDetails,
   editProduct,
   deleteProduct,
-  topRatedProducts
+  topRatedProducts,
+  createProductReview
 } from '../actions/productThunk'
 
 const productList = {
@@ -23,7 +24,18 @@ const productTopRated =  {
 }
 
 const productDetails = {
-  details: null,
+  details: {
+    name:'',
+    image: '',
+    brand: '',
+    category: '',
+    description: '',
+    rating: '',
+    numReviews: '',
+    price: '',
+    countInStock: '',
+    reviews: [],
+  },
   error: false,
   loading: false
 }
@@ -39,12 +51,18 @@ const productDelete = {
   error: false
 }
 
+const productReviewCreate = {
+  success: false,
+  error: false
+}
+
 const initialState = {
   productList,
   productTopRated,
   productDetails,
   productCreate,
-  productDelete
+  productDelete,
+  productReviewCreate
 }
 
 const productSlice = createSlice({
@@ -57,12 +75,16 @@ const productSlice = createSlice({
     productCreateReset:(state) => {
       state.productCreate = productCreate
     },
+    productReviewCreateReset: (state) => {
+      state.productReviewCreate = productReviewCreate
+    },
     productReset: (state) => {
       state.productList = productList;
       state.productDetails = productDetails;
       state.productCreate = productCreate;
       state.productDelete = productDelete;
       state.productTopRated = productTopRated;
+      state.productReviewCreate = productReviewCreate;
     }
   },
   extraReducers: (build) => {
@@ -156,13 +178,25 @@ const productSlice = createSlice({
         state.productDelete.error = action.payload;
       })
 
+      .addCase(createProductReview.pending, (state) => {
+        state.productReviewCreate.success = false;
+        state.productReviewCreate.error = false;
+      })
+      .addCase(createProductReview.fulfilled, (state) => {
+        state.productReviewCreate.success = true
+      })
+      .addCase(createProductReview.rejected, (state,action) => {
+        state.productReviewCreate.error = action.payload;
+      })
+
   }
 })
 
 export const {
   productCreateReset,
   productReset,
-  productListReset
+  productListReset,
+  productReviewCreateReset
 } = productSlice.actions
 
 export default productSlice.reducer

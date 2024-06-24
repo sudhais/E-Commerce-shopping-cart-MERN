@@ -145,3 +145,35 @@ export const deleteProduct = createAsyncThunk('deleteProduct', async(id,{rejectW
     
   }
 })
+
+export const createProductReview = createAsyncThunk('productReview', async({id,rating,comment}, {rejectWithValue,getState}) => {
+
+    try {
+
+      const state = getState();
+      const token = state.user.userInfo.user.token;
+
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const {data} = await axios.post(
+        `/api/products/${id}/reviews`,
+        {rating,comment},
+        config
+      )
+      return data;
+      
+    } catch (error) {
+      const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+
+      return rejectWithValue(message);
+      
+    }
+
+})
