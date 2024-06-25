@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { createProductReview, proDetails } from '../actions/productThunk'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -10,6 +10,7 @@ import Rating from '../components/Rating'
 import {productReviewCreateReset} from '../reducers/productSlice'
 
 export default function ProductPage() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const {id} = useParams()
   const {loading,error,details:product} = useSelector((state) => state.product.productDetails) 
@@ -39,6 +40,12 @@ export default function ProductPage() {
 
   }
 
+  const handleGoBack = () => {
+    if(errorReview)
+      dispatch(productReviewCreateReset())
+    navigate('/')
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     dispatch(createProductReview({id,rating,comment}))
@@ -46,9 +53,9 @@ export default function ProductPage() {
 
   return (
     <>
-      <Link className='btn btn-light my-3' to='/'>
+      <Button className='btn btn-light my-3' onClick={handleGoBack}>
         Go Back
-      </Link>
+      </Button>
       {loading ? (
         <Loader/>
       ) : error ? (
