@@ -5,6 +5,7 @@ import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userReset } from '../reducers/userSlice';
 import { productReset } from '../reducers/productSlice';
+import { cartReset } from '../reducers/cartSlice';
 
 export default function Header() {
   const { user:userInfo } = useSelector((state) => state.user.userInfo);
@@ -14,6 +15,7 @@ export default function Header() {
   const logoutHandler = () => {
     dispatch(userReset());
     dispatch(productReset())
+    dispatch(cartReset())
     navigate('/login');
   };
 
@@ -27,13 +29,11 @@ export default function Header() {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {/* <Routes>
-              <Route render={({ history }) => <SearchBox history={history} />} />
-            </Routes> */}
+
             <SearchBox />
 
             <Nav className="ml-auto">
-              <Nav.Link as={Link} to='/'>
+              <Nav.Link as={Link} to='/cart'>
                 <i className="fas fa-shopping-cart"></i>Cart
               </Nav.Link>
               {userInfo ? (

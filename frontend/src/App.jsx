@@ -11,6 +11,7 @@ import UserEditPage from './pages/UserEditPage'
 import ProductEditPage from './pages/ProductEditPage'
 import NotFoundPage from './pages/NotFoundPage'
 import ProductPage from './pages/ProductPage'
+import CartPage from './pages/CartPage'
 
 
 
@@ -22,6 +23,8 @@ function App() {
       <main className='py-3'>
         <Container>
           <Routes>
+            <Route path="/cart/:id/:qty" element={<CartPage/>} />
+            <Route path="/cart" element={<CartPage/>} />
             <Route path="/admin/userlist" element={<UserListPage/>} />
             <Route path="/admin/user/:id/edit" element={<UserEditPage/>}/>
             <Route path="/admin/productlist" element={<ProductListPage/>}/>

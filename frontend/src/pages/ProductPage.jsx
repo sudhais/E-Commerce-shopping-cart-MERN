@@ -17,7 +17,7 @@ export default function ProductPage() {
   const {success, error:errorReview} = useSelector((state) => state.product.productReviewCreate)
   const {user:userInfo} = useSelector((state) => state.user.userInfo) 
 
-  const [qty, setQty] = useState(0)
+  const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
 
@@ -124,7 +124,7 @@ export default function ProductPage() {
                     className='btn-block'
                     type='button'
                     disabled={product.countInStock === 0}
-                    onClick={handleAddToCart}
+                    onClick={() => navigate(`/cart/${product._id}/${qty}`)}
                   >
                     Add To Cart
                   </Button>
