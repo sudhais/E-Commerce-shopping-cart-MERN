@@ -12,6 +12,9 @@ import ProductEditPage from './pages/ProductEditPage'
 import NotFoundPage from './pages/NotFoundPage'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
+import ShippingPage from './pages/ShippingPage'
+import PaymentPage from './pages/PaymentPage'
+import PlaceOrderPage from './pages/PlaceOrderPage'
 
 
 
@@ -23,6 +26,9 @@ function App() {
       <main className='py-3'>
         <Container>
           <Routes>
+            <Route path="/placeorder" element={<PlaceOrderPage/>} />
+            <Route path="/payment" element={<PaymentPage/>} />
+            <Route path="/shipping" element={<ShippingPage/>} />
             <Route path="/cart/:id/:qty" element={<CartPage/>} />
             <Route path="/cart" element={<CartPage/>} />
             <Route path="/admin/userlist" element={<UserListPage/>} />

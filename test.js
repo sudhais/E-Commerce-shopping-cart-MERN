@@ -1,24 +1,13 @@
 
 
-let data = [
-  { id: '1', name: 'Item 1', qty:2 },
-  { id: '2', name: 'Item 2', qty:3 },
-  { id: '3', name: 'Item 3' , qty:4}
-];
+let data = { id: '1', name: 'Item 1', qty:2 }
+const data1 = { id: '2', name: 'Item 2', qty:2 }
 
-const idExists = (array, id) => (
-   array.some(item => item.id === id)
-)
+data = {...data,id:2}
 
-const data1 = data.map((item) => 
-  item.id === '2'
-    ? { ...item, qty:6 }
-    : item
-);
+console.log(data);
 
-// Example usage:
-console.log(idExists(data, '1')); // true
-console.log(data1); // false
+
 
 
 

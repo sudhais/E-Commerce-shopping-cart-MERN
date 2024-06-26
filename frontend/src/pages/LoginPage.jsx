@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react'
 import FormContainer from '../components/FormContainer';
 import { Button, Form,Row,Col } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../actions/userThunk';
 import Message from '../components/Message';
@@ -9,6 +9,13 @@ import Loader from '../components/Loader';
 
 export default function LoginPage() {
 
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search)
+  }
+
+  const query = useQuery()
+  const redirect = query.get('redirect') ? query.get('redirect') : '/' 
+  
   const dispatch = useDispatch()
   const {user,loading,error} = useSelector((state)=> state.user.userInfo)
   const [email, setEmail] = useState('')
@@ -18,7 +25,7 @@ export default function LoginPage() {
 
   useEffect(()=>{
     if(user){
-      navigate('/')
+      navigate(redirect)
     }
   }, [user,navigate])
 

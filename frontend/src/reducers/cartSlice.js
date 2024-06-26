@@ -2,8 +2,19 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const cartList = []
 
+const shippingAddress = {
+  address: '',
+  city: '',
+  postalCode: '',
+  country: ''
+}
+
+const paymentMethod = ''
+
 const initialState = {
-  cartList
+  cartList,
+  shippingAddress,
+  paymentMethod
 
 }
 
@@ -13,6 +24,8 @@ const cartSlice = createSlice({
   reducers: {
     cartReset : (state) => {
       state.cartList = cartList
+      state.shippingAddress = shippingAddress
+      state.paymentMethod = paymentMethod
     },
     addToCart : (state,action) => {
       const isExists = state.cartList.some((item) => item._id === action.payload._id)
@@ -28,6 +41,12 @@ const cartSlice = createSlice({
     },
     removeCart: (state,action) => {
       state.cartList = state.cartList.filter((item) => item._id !== action.payload)
+    },
+    addShippingAddress : (state,action) => {
+      state.shippingAddress = action.payload
+    },
+    addPaymentMethod : (state,action) => {
+      state.paymentMethod = action.payload
     }
 
   },
@@ -40,7 +59,9 @@ export const {
   cartReset,
   addToCart,
   addQty,
-  removeCart
+  removeCart,
+  addShippingAddress,
+  addPaymentMethod
 } = cartSlice.actions
 
 export default cartSlice.reducer
