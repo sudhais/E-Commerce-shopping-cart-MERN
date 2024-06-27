@@ -23,9 +23,10 @@ app.use((req,res,next)=>{
   next();
 })
 
-// app.post("/api", (req,res)=> {
-//   res.send('hellow')
-// })
+
+app.use("/api/config/paypal", (req,res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID)
+})
 
 
 app.use("/api/users",userRoutes);
