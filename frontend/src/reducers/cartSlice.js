@@ -9,12 +9,20 @@ const shippingAddress = {
   country: ''
 }
 
+const price = {
+  itemsPrice : '',
+  shippingPrice : '',
+  taxPrice: '',
+  totalPrice: ''
+}
+
 const paymentMethod = ''
 
 const initialState = {
   cartList,
   shippingAddress,
-  paymentMethod
+  paymentMethod,
+  price
 
 }
 
@@ -26,6 +34,7 @@ const cartSlice = createSlice({
       state.cartList = cartList
       state.shippingAddress = shippingAddress
       state.paymentMethod = paymentMethod
+      state.price = price
     },
     addToCart : (state,action) => {
       const isExists = state.cartList.some((item) => item._id === action.payload._id)
@@ -47,6 +56,23 @@ const cartSlice = createSlice({
     },
     addPaymentMethod : (state,action) => {
       state.paymentMethod = action.payload
+    },
+    calculatePrice : (state) => {
+      const addDecimals = (num) => {
+        return (Math.round(num * 100) / 100).toFixed(2)
+      }
+
+      state.price.itemsPrice = addDecimals(
+        state.cartList.reduce((acc,item) => acc + (item.price * item.qty), 0)
+      )
+
+      state.price.shippingPrice = addDecimals(state.price.itemsPrice > 600 ? 100 : 0)
+      state.price.taxPrice = addDecimals(Number((0.15 * state.price.itemsPrice).toFixed(2)))
+      state.price.totalPrice = (
+        Number(state.price.itemsPrice) +
+        Number(state.price.shippingPrice) +
+        Number(state.price.taxPrice)
+      ).toFixed(2)
     }
 
   },
@@ -61,7 +87,8 @@ export const {
   addQty,
   removeCart,
   addShippingAddress,
-  addPaymentMethod
+  addPaymentMethod,
+  calculatePrice
 } = cartSlice.actions
 
 export default cartSlice.reducer
