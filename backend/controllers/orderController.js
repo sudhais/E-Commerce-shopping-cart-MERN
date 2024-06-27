@@ -1,5 +1,6 @@
 import AsyncHandler from "express-async-handler"
 import OrderModel from '../models/orderModel.js'
+import ProductModel from '../models/productModel.js'
 import mongoose from "mongoose"
 
 //@access admin only
@@ -32,6 +33,22 @@ export const addOrderItem = AsyncHandler( async (req,res) => {
   if(orderItems && orderItems.length === 0) {
     res.status(400)
     throw new Error('No order items')
+  }
+
+  // Check stock availability for each product in the order
+  for (const item of orderItems) {
+    const product = await ProductModel.findById(item.product);
+    console.log(item.product);
+
+    if (!product) {
+      res.status(404);
+      throw new Error(`Product not found: ${item.product}`);
+    }
+
+    if (product.countInStock < item.qty) {
+      res.status(400);
+      throw new Error(`Not enough stock for product: ${product.name}`);
+    }
   }
 
   const order = new OrderModel({
