@@ -172,6 +172,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUserProfile.fulfilled, (state,action)=> {
         state.userDetails.details = action.payload;
+        state.userInfo.user = {...state.userInfo.user, name: action.payload.name, email: action.payload.email}
         state.userUpdate.successUpdate = true;
         state.userUpdate.loading = false;
       })

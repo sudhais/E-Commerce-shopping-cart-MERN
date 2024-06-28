@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { ListOrders, createOrder, deliverOrder, orderDetailsThunk, payOrder } from "../actions/orderThunk"
+import { ListMyOrders, ListOrders, createOrder, deliverOrder, orderDetailsThunk, payOrder } from "../actions/orderThunk"
 
 const orderCreate = {
   success:false,
@@ -49,12 +49,19 @@ const orderList = {
   error: false
 }
 
+const orderMyList = {
+  list: [],
+  loading: false,
+  error: false
+}
+
 const initialState = {
   orderList,
   orderCreate,
   orderDetails,
   orderPay,
-  orderDeliver
+  orderDeliver,
+  orderMyList
 }
 
 const orderSlice = createSlice({
@@ -70,6 +77,7 @@ const orderSlice = createSlice({
       state.orderPay = orderPay;
       state.orderDeliver = orderDeliver;
       state.orderList = orderList;
+      state.orderMyList = orderMyList;
     },
     orderPayReset: (state) => {
       state.orderPay = orderPay;
@@ -90,6 +98,7 @@ const orderSlice = createSlice({
       state.orderCreate.order = action.payload;
       state.orderCreate.success = true;
       state.orderCreate.loading = false;
+      state.orderMyList.list = [...state.orderMyList.list, action.payload]
     })
     .addCase(createOrder.rejected, (state,action) => {
       state.orderCreate.error = action.payload;
@@ -148,6 +157,19 @@ const orderSlice = createSlice({
     .addCase(deliverOrder.rejected, (state,action) => {
       state.orderDeliver.error = action.payload;
       state.orderDeliver.loading = false;
+    })
+
+    .addCase(ListMyOrders.pending, (state) => {
+      state.orderMyList.loading = true;
+      state.orderMyList.error = false;
+    })
+    .addCase(ListMyOrders.fulfilled, (state,action) => {
+      state.orderMyList.list = action.payload;
+      state.orderMyList.loading = false;
+    })
+    .addCase(ListMyOrders.rejected, (state,action) => {
+      state.orderMyList.error = action.payload;
+      state.orderMyList.loading = false;
     })
   }
 })

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { deliverOrder, orderDetailsThunk, payOrder } from '../actions/orderThunk'
@@ -13,6 +13,13 @@ export default function OrderPage() {
   const {id} = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search)
+  }
+
+  const query = useQuery()
+  const profile = query.get('profile') ? query.get('profile') : false
 
   const {user:userInfo} = useSelector((state) => state.user.userInfo)
   const {details:order, loading, error} = useSelector((state) => state.order.orderDetails) 
@@ -71,7 +78,10 @@ export default function OrderPage() {
     if(userInfo.isAdmin){
       navigate('/admin/orderList')
     }else{
-      navigate('/')
+      if(profile)
+        navigate('/profile')
+      else
+        navigate('/')
     }
   }
 
@@ -81,10 +91,10 @@ export default function OrderPage() {
     <Message variant='danger'>{error}</Message>
   ) : (
     <>
-      <h1>Order {order._id}</h1>
-      <Button className='btn btn-light my-3' onClick={handleGoBack}>
+      <Button className='btn btn-light my-3 fw-bold' onClick={handleGoBack}>
         Go Back
       </Button>
+      <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
