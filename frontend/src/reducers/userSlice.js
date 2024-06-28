@@ -5,7 +5,9 @@ import {
   listUser,
   userDelete,
   getUserDetails,
-  updateUser
+  updateUser,
+  getUserProfile,
+  updateUserProfile
 } from '../actions/userThunk'
 
 const userInfo = {
@@ -146,6 +148,34 @@ const userSlice = createSlice({
         state.userUpdate.loading = false;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.userUpdate.loading = false;
+        state.userUpdate.error = action.payload
+      })
+
+      .addCase(getUserProfile.pending, (state)=> {
+        state.userDetails.loading = true;
+        state.userDetails.error = false;
+      })
+      .addCase(getUserProfile.fulfilled, (state,action)=> {
+        state.userDetails.details = action.payload;
+        state.userDetails.loading = false;
+      })
+      .addCase(getUserProfile.rejected, (state, action) => {
+        state.userDetails.loading = false;
+        state.userDetails.error = action.payload
+      })
+
+      .addCase(updateUserProfile.pending, (state)=> {
+        state.userUpdate.loading = true;
+        state.userUpdate.error = false;
+        state.userUpdate.successUpdate = false;
+      })
+      .addCase(updateUserProfile.fulfilled, (state,action)=> {
+        state.userDetails.details = action.payload;
+        state.userUpdate.successUpdate = true;
+        state.userUpdate.loading = false;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
         state.userUpdate.loading = false;
         state.userUpdate.error = action.payload
       })

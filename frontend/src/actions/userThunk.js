@@ -155,3 +155,62 @@ export const updateUser = createAsyncThunk('updateUser', async({id,user},{reject
     return rejectWithValue(message);
   }
 })
+
+export const getUserProfile = createAsyncThunk('getUserProfile', async(_,{rejectWithValue,getState}) => {
+
+  try {
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    const res = await axios.get(
+      `/api/users/profile`,
+
+      config
+    )
+    const data = res.data
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+
+})
+
+export const updateUserProfile = createAsyncThunk('updateUserProfile', async({formData},{rejectWithValue,getState}) => {
+
+  try {
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const res = await axios.put(
+      `/api/users/profile`,
+      formData,
+      config
+    )
+    const data = res.data
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+
+})

@@ -17,6 +17,7 @@ import PaymentPage from './pages/PaymentPage'
 import PlaceOrderPage from './pages/PlaceOrderPage'
 import OrderPage from './pages/OrderPage'
 import OrderListPage from './pages/OrderListPage'
+import ProfilePage from './pages/ProfilePage'
 
 
 
@@ -28,6 +29,7 @@ function App() {
       <main className='py-3'>
         <Container>
           <Routes>
+            <Route path="/profile" element={<ProfilePage/>} />
             <Route path="/order/:id" element={<OrderPage/>} />
             <Route path="/placeorder" element={<PlaceOrderPage/>} />
             <Route path="/payment" element={<PaymentPage/>} />
