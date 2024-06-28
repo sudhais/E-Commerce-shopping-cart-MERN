@@ -38,13 +38,12 @@ userSchema.methods.matchPassword = function (enteredPassword) {
 userSchema.pre('save', async function (next) {
   // If the password field is not modified, proceed to the next middleware
   if (!this.isModified('password')) {
-    next();
+    return next();
   }
 
   // Generate a salt and hash the password
   const salt =  bcrypt.genSaltSync(10);
   this.password =  bcrypt.hashSync(this.password, salt);
-  next();
 });
 
 const UserModel = mongoose.model('User', userSchema)

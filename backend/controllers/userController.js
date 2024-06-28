@@ -80,7 +80,8 @@ const authUser = asyncHandler(async (req,res) => {
 
 //@access private
 const updateProfile = asyncHandler(async (req,res)=>{
-  const {name, email, password} = req.body
+  const {name, email, password, isAdmin} = req.body
+  const isUserAdmin = req.user.isAdmin ? true : false
   const user = await UserModel.findById(req.user._id)
   if(!user){
     res.status(404)
@@ -96,9 +97,12 @@ const updateProfile = asyncHandler(async (req,res)=>{
     }
     user.email = email
   }
-  console.log(user.password);
-  if(password && !(user.matchPassword(password)))
+  if(isUserAdmin){
+    user.isAdmin = isAdmin
+  }
+  if(password && !(user.matchPassword(password))){
     user.password = password
+  }
 
   const updatedUser = await user.save()
 
@@ -136,6 +140,7 @@ const getUserById = asyncHandler(async (req,res) => {
 
   const user = await UserModel.findById(id)
   if(user){
+    req.user = user
     await getUserProfile(req,res)
   }else{
     res.status(404)
@@ -151,7 +156,7 @@ const updateUser = asyncHandler(async (req,res)=>{
     throw new Error('invalid user id')
   }
 
-  req.user = {_id:id}
+  req.user = {_id:id, isAdmin:true}
   await updateProfile(req,res)
 
 })
@@ -167,7 +172,7 @@ const deleteUser = asyncHandler(async (req,res) => {
   const user = await UserModel.findByIdAndDelete(id)
 
   if(user){
-    res.status(200).json({message:'successfully removed'})
+    res.status(200).json({success:true,message:'successfully removed'})
   }else{
     res.status(404)
     throw new Error('user not found')

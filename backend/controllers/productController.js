@@ -6,19 +6,52 @@ import mongoose from 'mongoose'
 //@access public
 export const getProducts = asyncHandler(async (req,res) => {
 
-  const pageSize = 10;
+  const pageSize = 6;
   const page = Number(req.query.pageNumber) || 1;
 
   const keyword = req.query.keyword ? {
-      name: {
-        $regex: req.query.keyword,
-        $options: "i",
-      },
-    } : {};
-    
-  const count = await ProductModel.countDocuments({...keyword})
+    name: {
+      $regex: req.query.keyword,
+      $options: "i",
+    },
+  } : {};
 
-  const products = await ProductModel.find({...keyword})
+  const category = req.query.category
+    ? {
+        category: {
+          $regex: req.query.category,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const rating = req.query.rating ? {
+    rating : {
+      $gte : Number(req.query.rating)
+    },
+  } : {}
+
+  const minPrice = req.query.minPrice ? true : false
+
+  const maxPrice = req.query.maxPrice ? true : false
+
+  const price = (req.query.minPrice || req.query.maxPrice) ? {
+    price: {
+      ...(minPrice && { $gte: Number(req.query.minPrice) }),
+      ...(maxPrice && { $lte: Number(req.query.maxPrice) }),
+    }
+  } : {}
+
+  const filters = {
+    ...keyword,
+    ...category,
+    ...rating,
+    ...price
+  }
+  
+  const count = await ProductModel.countDocuments({...filters})
+
+  const products = await ProductModel.find({...filters})
     .limit(pageSize)
     .skip(pageSize * (page-1))
   if(products){
@@ -45,9 +78,7 @@ export const getProductById = asyncHandler(async (req,res) => {
 
   const product = await ProductModel.findById(id)
   if(product){
-    res.status(200).json({
-      product
-    })
+    res.status(200).json(product)
   }else{
     res.status(400)
     throw new Error('product not found')
@@ -61,9 +92,7 @@ export const getTopProducts = asyncHandler(async (req,res) => {
 
   const product = await ProductModel.find({}).sort({rating:-1}).limit(3)
   if(product){
-    res.status(200).json({
-      product
-    })
+    res.status(200).json(product)
   }else{
     res.status(500)
     throw new Error('something went wrong please try again later')
@@ -136,7 +165,7 @@ export const createProduct = asyncHandler(async (req,res) => {
     name: product.name,
     price: product.price,
     user: req.user._id,
-    image: "images/sample.jpg",
+    image: product.image,
     brand: product.brand,
     category: product.category,
     countInStock: product.countInStock,
@@ -148,10 +177,7 @@ export const createProduct = asyncHandler(async (req,res) => {
     res.status(400)
     throw new Error('cannot be created')
   }
-  res.status(201).json({
-    message: 'successfully created',
-    product:iscreated
-  })
+  res.status(201).json(iscreated)
 
 })
 
@@ -225,10 +251,7 @@ export const updateProductById = asyncHandler(async (req,res) => {
   const updatedProduct = await ProductModel.findByIdAndUpdate(id,product, {new:true})
 
   if(updatedProduct)
-    res.status(200).json({
-      message: 'succesfully updated',
-      product: updatedProduct
-    })
+    res.status(200).json(updatedProduct)
   else{
     res.status(400)
     throw new Error('failed to update')
