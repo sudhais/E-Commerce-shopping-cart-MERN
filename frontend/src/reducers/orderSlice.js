@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { createOrder, deliverOrder, orderDetailsThunk, payOrder } from "../actions/orderThunk"
+import { ListOrders, createOrder, deliverOrder, orderDetailsThunk, payOrder } from "../actions/orderThunk"
 
 const orderCreate = {
   success:false,
@@ -43,7 +43,14 @@ const orderDeliver = {
   error: false
 }
 
+const orderList = {
+  list: [],
+  loading: false,
+  error: false
+}
+
 const initialState = {
+  orderList,
   orderCreate,
   orderDetails,
   orderPay,
@@ -62,6 +69,7 @@ const orderSlice = createSlice({
       state.orderDetails = orderDetails;
       state.orderPay = orderPay;
       state.orderDeliver = orderDeliver;
+      state.orderList = orderList;
     },
     orderPayReset: (state) => {
       state.orderPay = orderPay;
@@ -113,6 +121,19 @@ const orderSlice = createSlice({
     .addCase(payOrder.rejected, (state,action) => {
       state.orderPay.error = action.payload;
       state.orderPay.loading = false;
+    })
+
+    .addCase(ListOrders.pending, (state) => {
+      state.orderList.loading = true;
+      state.orderList.error = false;
+    })
+    .addCase(ListOrders.fulfilled, (state,action) => {
+      state.orderList.list = action.payload;
+      state.orderList.loading = false;
+    })
+    .addCase(ListOrders.rejected, (state,action) => {
+      state.orderList.error = action.payload;
+      state.orderList.loading = false;
     })
 
     .addCase(deliverOrder.pending, (state) => {

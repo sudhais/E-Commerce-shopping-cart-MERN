@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userReset } from '../reducers/userSlice';
 import { productReset } from '../reducers/productSlice';
 import { cartReset } from '../reducers/cartSlice';
+import { orderReset } from '../reducers/orderSlice';
 
 export default function Header() {
   const { user:userInfo } = useSelector((state) => state.user.userInfo);
@@ -16,6 +17,7 @@ export default function Header() {
     dispatch(userReset());
     dispatch(productReset())
     dispatch(cartReset())
+    dispatch(orderReset())
     navigate('/login');
   };
 
@@ -57,6 +59,9 @@ export default function Header() {
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to='/admin/productlist'>
                     Products
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to='/admin/orderList'>
+                    Orders
                   </NavDropdown.Item>
                 </NavDropdown>
               )}

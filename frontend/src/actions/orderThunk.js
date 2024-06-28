@@ -106,7 +106,35 @@ export const deliverOrder = createAsyncThunk('deliverOrder', async(id,{rejectWit
     const message = error.response && error.response.data.message 
       ? error.response.data.message 
       : error.message;
-      console.log(message);
     return rejectWithValue(message);
+  }
+})
+
+export const ListOrders = createAsyncThunk('orderList', async(_,{rejectWithValue,getState}) => {
+
+  try {
+
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    };
+
+    const {data} = await axios.get(
+      `/api/orders`,
+      config
+    )
+
+    return data;
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+    
   }
 })

@@ -16,6 +16,7 @@ import ShippingPage from './pages/ShippingPage'
 import PaymentPage from './pages/PaymentPage'
 import PlaceOrderPage from './pages/PlaceOrderPage'
 import OrderPage from './pages/OrderPage'
+import OrderListPage from './pages/OrderListPage'
 
 
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="/shipping" element={<ShippingPage/>} />
             <Route path="/cart/:id/:qty" element={<CartPage/>} />
             <Route path="/cart" element={<CartPage/>} />
+            <Route path="/admin/orderList" element={<OrderListPage/>} />
             <Route path="/admin/userlist" element={<UserListPage/>} />
             <Route path="/admin/user/:id/edit" element={<UserEditPage/>}/>
             <Route path="/admin/productlist" element={<ProductListPage/>}/>

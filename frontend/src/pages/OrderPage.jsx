@@ -6,7 +6,7 @@ import Message from '../components/Message'
 import { deliverOrder, orderDetailsThunk, payOrder } from '../actions/orderThunk'
 import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
 import {PayPalButtons, PayPalScriptProvider} from '@paypal/react-paypal-js'
-import { orderDeliverReset, orderPayReset } from '../reducers/orderSlice'
+import { orderDeliverReset, orderPayReset, orderReset } from '../reducers/orderSlice'
 
 export default function OrderPage() {
 
@@ -66,6 +66,15 @@ export default function OrderPage() {
     dispatch(deliverOrder(id))
   }
 
+  const handleGoBack = () => {
+    dispatch(orderReset())
+    if(userInfo.isAdmin){
+      navigate('/admin/orderList')
+    }else{
+      navigate('/')
+    }
+  }
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -73,6 +82,9 @@ export default function OrderPage() {
   ) : (
     <>
       <h1>Order {order._id}</h1>
+      <Button className='btn btn-light my-3' onClick={handleGoBack}>
+        Go Back
+      </Button>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
