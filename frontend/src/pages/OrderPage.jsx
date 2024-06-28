@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { orderDetailsThunk, payOrder } from '../actions/orderThunk'
-import { Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
+import { deliverOrder, orderDetailsThunk, payOrder } from '../actions/orderThunk'
+import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap'
 import {PayPalButtons, PayPalScriptProvider} from '@paypal/react-paypal-js'
-import { orderPayReset } from '../reducers/orderSlice'
+import { orderDeliverReset, orderPayReset } from '../reducers/orderSlice'
 
 export default function OrderPage() {
 
@@ -17,7 +17,7 @@ export default function OrderPage() {
   const {user:userInfo} = useSelector((state) => state.user.userInfo)
   const {details:order, loading, error} = useSelector((state) => state.order.orderDetails) 
   const {loading:loadingPay, error:errorPay, success:successPay} = useSelector((state) => state.order.orderPay)
-  // const {loading:loadingDeliver, success:successDeliver} = useSelector((state) => state.order.orderDeliver)
+  const {loading:loadingDeliver, success:successDeliver, error:errorDeliver} = useSelector((state) => state.order.orderDeliver)
   const clientId = import.meta.env.VITE_CLIENT_ID
   const [sdkReady, setSdkReady] = useState(false)
 
@@ -26,9 +26,6 @@ export default function OrderPage() {
     currency: "USD",
     intent: "capture",
   };
-
-  console.log(sdkReady);
-
 
   useEffect(() => {
     
@@ -46,9 +43,10 @@ export default function OrderPage() {
       document.body.appendChild(script)
     }
 
-    if(!order || successPay || order._id !== id){
+    if(!order || successPay || order._id !== id || successDeliver){
       dispatch(orderDetailsThunk(id))
       dispatch(orderPayReset())
+      dispatch(orderDeliverReset())
     }else if (!order.isPaid) {
       if (!window.paypal) {
         addPayPalScript()
@@ -57,11 +55,15 @@ export default function OrderPage() {
       }
     }
 
-  } , [dispatch,successPay,order,id, userInfo])
+  } , [dispatch,successPay,order,id, userInfo,successDeliver])
 
   const successPaymentHandler = (paymentResult) => {
     // console.log(paymentResult);
     dispatch(payOrder({id,paymentResult}))
+  }
+
+  const handleDeliver = () => {
+    dispatch(deliverOrder(id))
   }
 
   return loading ? (
@@ -199,6 +201,23 @@ export default function OrderPage() {
                   )}
                 </ListGroup.Item>
               )}
+              {loadingDeliver && <Loader/>}
+              {userInfo && 
+                userInfo.isAdmin &&
+                order.isPaid && 
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    {errorDeliver && <Message variant='danger'>{errorDeliver}</Message>}
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={handleDeliver}
+                    >
+                      Mark as Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )
+              }
             </ListGroup>
           </Card>
         </Col>
