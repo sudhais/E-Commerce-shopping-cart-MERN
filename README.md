@@ -24,7 +24,7 @@
 
 ### Env Variables
 
-Create a .env file in then root and add the following
+Create a .env file in root then add the following
 
 ```
 NODE_ENV = development
@@ -33,20 +33,55 @@ MONG_URI = your mongodb uri
 JWT_SECRET = 'abc123'
 ```
 
-### Install Dependencies (frontend & backend)
+Create a .env file inside the frontend file then add the following
+```
+VITE_CLIENT_ID = your pay pal client id
+```
 
-#### backend
+### Install Dependencies (frontend & root)
+
+#### root
 
 ```
 npm install
+
+or 
+
+npm run server
+```
+
+#### frontend
+```
+cd frontend
+npm install
+npm run build
+
+or 
+
+npm run client-build
+```
+
+#### (frontend & backend both)
+```
+npm run build
 ```
 
 ### Run
 
 ```
-# Run backend
-npm run dev
+# Run backend (in root folder)
+npm start
+    or
+    using nodemon
+npm run server
 ```
+
+#Run frontend
+````
+npm run dev
+
+  or in root
+npm run client
 
 ### Seed Database
 
