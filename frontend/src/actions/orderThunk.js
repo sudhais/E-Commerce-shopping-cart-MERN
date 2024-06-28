@@ -28,3 +28,57 @@ export const createOrder = createAsyncThunk('createOrder', async (order,{rejectW
   }
 
 })
+
+export const orderDetailsThunk = createAsyncThunk('orderDetails', async(id,{rejectWithValue,getState}) => {
+
+  try {
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    };
+
+    const {data}  = await axios.get(
+      `/api/orders/${id}`,
+      config
+    )
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+})
+
+export const payOrder  = createAsyncThunk('payOrder', async({id,paymentResult},{rejectWithValue,getState}) => {
+
+  try {
+    const state = getState();
+    const token = state.user.userInfo.user.token;
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const {data} = await axios.put(
+      `/api/orders/${id}/pay`,
+      paymentResult,
+      config
+    )
+    console.log(data);
+    return data
+    
+  } catch (error) {
+    const message = error.response && error.response.data.message 
+      ? error.response.data.message 
+      : error.message;
+    return rejectWithValue(message);
+  }
+})

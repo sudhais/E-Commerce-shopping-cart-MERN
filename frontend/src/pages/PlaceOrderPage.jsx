@@ -17,8 +17,6 @@ export default function PlaceOrderPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  console.log(order);
-
   useEffect(() => {
 
     if(success){

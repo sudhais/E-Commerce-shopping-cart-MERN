@@ -92,7 +92,7 @@ export const getOrderById = AsyncHandler(async (req,res) => {
 
   validMongoId(id)
 
-  const order = await OrderModel.findById(id)
+  const order = await OrderModel.findById(id).populate('user', 'name email')
 
   if(order){
     res.status(200).json(order)
