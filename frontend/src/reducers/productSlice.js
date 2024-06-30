@@ -157,6 +157,7 @@ const productSlice = createSlice({
           else
             return product
         })
+        state.productDetails.details = action.payload
         state.productCreate.loading = false
         state.productCreate.successCreate = true
       })

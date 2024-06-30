@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../actions/userThunk';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import { userInfoReset } from '../reducers/userSlice';
 
 export default function LoginPage() {
 
@@ -28,6 +29,15 @@ export default function LoginPage() {
       navigate(redirect)
     }
   }, [user,navigate])
+
+  useEffect(() => {
+    if(error) {
+      const timer = setTimeout(() => {
+        dispatch(userInfoReset())
+      },7000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
 
   const handleSubmit = (e) => {
     e.preventDefault()

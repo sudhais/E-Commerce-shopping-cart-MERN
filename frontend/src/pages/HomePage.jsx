@@ -14,7 +14,6 @@ export default function HomePage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {pageNumber} = useParams()
-  const {user:userInfo} = useSelector((state) => state.user.userInfo)
   const {loading, error, list:products,page,pages} = useSelector((state)=> state.product.productList)
   const {keyword} = useParams()
   const [priceRange,setPriceRange] = useState('')
@@ -54,9 +53,9 @@ export default function HomePage() {
               onChange={(e) => setPriceRange(e.target.value)}             
             >
               <option value='' >All</option>
-              <option value='0-1000' >Rs.0 - Rs.1000</option>
-              <option value='1001-5000' >Rs.1001 - Rs.5000</option>
-              <option value='5001-10000' >Rs.5001 - Rs.10000</option>
+              <option value='0-100' >$0 - $200</option>
+              <option value='201-500' >$201 - $500</option>
+              <option value='501-1000' >$501 - $1000</option>
             </Form.Control>
           </Form.Group>
 

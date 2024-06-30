@@ -61,6 +61,9 @@ const userSlice = createSlice({
     userUpdateReset: (state) => {
       state.userUpdate = userUpdate;
     },
+    userInfoReset: (state) => {
+      state.userInfo = userInfo;
+    },
     testing: (state) => {
       // console.log('working');
     }
@@ -187,6 +190,7 @@ const userSlice = createSlice({
 export const {
   userReset,
   userUpdateReset,
+  userInfoReset,
   testing
 } = userSlice.actions;
 

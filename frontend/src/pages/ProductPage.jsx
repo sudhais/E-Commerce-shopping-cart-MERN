@@ -36,10 +36,6 @@ export default function ProductPage() {
   }, [dispatch, success])
 
 
-  const handleAddToCart = () => {
-
-  }
-
   const handleGoBack = () => {
     if(errorReview)
       dispatch(productReviewCreateReset())
